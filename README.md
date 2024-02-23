@@ -1,5 +1,5 @@
 # CKAN Docs: Deployments and more!
-Welcome to the CKAN Deployments! This repository serves as a comprehensive guide for deploying CKAN in various environments, including through source code, Docker, Kubernetes, API documentation, additional information, and tips in a a Docusaurus[^1] website.
+Welcome to the CKAN Deployments! This repository serves as a comprehensive guide for deploying CKAN in various environments, including through source code, Docker, Kubernetes, API documentation, additional information, and tips in a a Docusaurus [^1] website.
 
 ## Contents
 1. [Introduction](#introduction)
@@ -10,7 +10,7 @@ Welcome to the CKAN Deployments! This repository serves as a comprehensive guide
 6. [License](#license)
 
 ## Introduction
-CKAN[^2] is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
+CKAN [^2] is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
 
 ## Deployment Methods
 This section covers various methods for deploying CKAN:
@@ -20,7 +20,7 @@ This section covers various methods for deploying CKAN:
 - **Kubernetes**: Deploying CKAN on Kubernetes clusters.
 
 ## API information
-Here you can find complete documentation for the CKAN API, including endpoints, parameters and examples of use with Swagger[^3].
+Here you can find complete documentation for the CKAN API, including endpoints, parameters and examples of use with Swagger [^3].
 
 ## Additional Information
 This section includes supplementary information, tips, best practices, and troubleshooting guides for working with CKAN.
