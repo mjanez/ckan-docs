@@ -31,6 +31,6 @@ Contributions to this documentation repository are welcome! If you have suggesti
 ## License
 This documentation is licensed under the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl-3.0.html).
 
-[^1] [Docusaurus](https://docusaurus.io/)
-[^2] [CKAN: An open source DMS](https://ckan.org/)
-[^3] [Swagger](https://swagger.io/).
+[^1]: [Docusaurus](https://docusaurus.io/)
+[^2]: [CKAN: An open source DMS](https://ckan.org/)
+[^3]: [Swagger](https://swagger.io/).

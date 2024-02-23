@@ -28,6 +28,6 @@ Esta sección incluye información complementaria, consejos, mejores prácticas 
 ## Contribución
 Las contribuciones a este repositorio de documentación son bienvenidas. Si tiene sugerencias, mejoras o desea informar de algún problema, no dude en enviar una solicitud de extracción o abrir una incidencia.
 
-[^1] [Docusaurus](https://docusaurus.io/)
-[^2] [CKAN: An open source DMS](https://ckan.org/)
-
+[^1]: [Docusaurus](https://docusaurus.io/)
+[^2]: [CKAN: An open source DMS](https://ckan.org/)
+[^3]: [Swagger](https://swagger.io/).
