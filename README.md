@@ -1,5 +1,5 @@
-# CKAN Documentation Repository
-Welcome to the CKAN Documentation Repository! This repository serves as a comprehensive guide for deploying CKAN in various environments, including through source code, Docker, Kubernetes, API documentation, additional information, and tips.
+# CKAN Docs: Deployments and more!
+Welcome to the CKAN Deployments! This repository serves as a comprehensive guide for deploying CKAN in various environments, including through source code, Docker, Kubernetes, API documentation, additional information, and tips in a a Docusaurus[^1] website.
 
 ## Contents
 1. [Introduction](#introduction)
@@ -10,17 +10,17 @@ Welcome to the CKAN Documentation Repository! This repository serves as a compre
 6. [License](#license)
 
 ## Introduction
-CKAN is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
+CKAN[^2] is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
 
 ## Deployment Methods
 This section covers various methods for deploying CKAN:
 
-- **Source Code:** Deploying CKAN from source code (RHEL, Debian, CentOS, SLES).
-- **Docker:** Deploying CKAN using Docker containers with Docker Compose.
-- **Kubernetes:** Deploying CKAN on Kubernetes clusters.
+- **Source Code**: Deploying CKAN from source code (RHEL, Debian, CentOS, SLES).
+- **Docker**: Deployment of CKAN using Docker containers via Docker Compose.
+- **Kubernetes**: Deploying CKAN on Kubernetes clusters.
 
-## API Documentation
-Here you can find comprehensive documentation for the CKAN API, including endpoints, parameters, and usage examples.
+## API information
+Here you can find complete documentation for the CKAN API, including endpoints, parameters and examples of use with Swagger[^3].
 
 ## Additional Information
 This section includes supplementary information, tips, best practices, and troubleshooting guides for working with CKAN.
@@ -30,3 +30,7 @@ Contributions to this documentation repository are welcome! If you have suggesti
 
 ## License
 This documentation is licensed under the [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl-3.0.html).
+
+[^1] [Docusaurus](https://docusaurus.io/)
+[^2] [CKAN: An open source DMS](https://ckan.org/)
+[^3] [Swagger](https://swagger.io/).
