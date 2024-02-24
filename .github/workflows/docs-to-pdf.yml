@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
       - run: npm ci
       - name: Generate PDF
-        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://api.ogptoolbox.org/images/7f/5d9cd03d8696c29670d698a93f47e3.png" --coverTitle="CKAN Docs" --outputPDFFilename="static/pdf/CKAN_Docs.pdf"
+        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs" --outputPDFFilename="static/pdf/CKAN_Docs.pdf"
       - name: Commit PDF
         run: |
           git config --local user.email "action@github.com"
