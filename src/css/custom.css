@@ -5,26 +5,64 @@
  */
 
 /* You can override the default Infima variables here. */
+
+@import 'font-awesome/css/font-awesome.min.css';
+
+/* Check styles: https://docusaurus.io/docs/styling-layout#styling-your-site-with-infima*/
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-color-primary: #00b9e2;
+  --ifm-color-primary-dark: #00a7cb;
+  --ifm-color-primary-darker: #009dc0;
+  --ifm-color-primary-darkest: #00829e;
+  --ifm-color-primary-light: #00ccf9;
+  --ifm-color-primary-lighter: #05d2ff;
+  --ifm-color-primary-lightest: #27d8ff;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #007b96;
+  --ifm-color-primary-dark: #006f87;
+  --ifm-color-primary-darker: #006980;
+  --ifm-color-primary-darkest: #005669;
+  --ifm-color-primary-light: #0087a5;
+  --ifm-color-primary-lighter: #008dad;
+  --ifm-color-primary-lightest: #00a0c3;
+}
+
+/* navbar */
+.navbar__icon {
+  height: 2rem;
+  width: 2rem;
+}
+
+.navbar__github {
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  transition: background var(--ifm-transition-fast);
+}
+
+html[data-theme='light'] .navbar__github {
+  color: #000;
+}
+
+html[data-theme='dark'] .navbar__github {
+  color: #fff;
+}
+
+.navbar__github:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+/* homepage */
+.hero {
+  align-items: center;
+  background-color: var(--ifm-hero-background-color);
+  color: var(--ifm-hero-text-color);
+  display: flex;
+  padding: 4rem 2rem;
 }
