@@ -24,7 +24,6 @@ const config: Config = {
 
   onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
-  trailingSlash: false
 
   plugins: [require.resolve('docusaurus-lunr-search')],
 
