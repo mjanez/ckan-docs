@@ -1,12 +1,13 @@
-# CKAN Deployment roadmap
+# Hoja de ruta de despliegue de CKAN
 
-### ckan-docker roadmap {#ckan-docker-roadmap}
-Information about extensions installed in the `main` image. More info described in the [Extending the base images](#extending-the-base-images) <FAIcon icon="fa fa-code-fork"/> 
+### ckan-docker hoja de ruta {#ckan-docker-roadmap}
+Información sobre las extensiones instaladas en la imagen `main`. Más información descrita en [Extending the base images](#extending-the-base-images) <FAIcon icon="fa fa-code-fork"/> 
 
-:::note
-Switch branches to see the `roadmap` for other projects: [ckan-docker/branches](https://github.com/mjanez/ckan-docker/branches)
+:::nota
+Cambia de rama para ver el `roadmap` de otros proyectos: [ckan-docker/ramas](https://github.com/mjanez/ckan-docker/branches)
 
 :::
+
 
 | **Element** | **Description**                                                                         | **version** | **Status**                   | **DEV**[^3] | **PRO**[^4]  | **Remarks**                                                                                                                                                                                                                                                                                                                                                             |
 |-------------|-----------------------------------------------------------------------------------------|-------------|------------------------------|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

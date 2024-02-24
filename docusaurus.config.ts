@@ -25,6 +25,8 @@ const config: Config = {
   onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
 
+  plugins: [require.resolve('docusaurus-lunr-search')],
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -41,9 +43,6 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/', // Serve the docs at the site's root
           // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: false, // Optional: disable the blog plugin
         theme: {
@@ -57,28 +56,43 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/ckan-docker/ckan-docker-logo.png',
     navbar: {
-      title: 'CKAN Docs',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'CKAN Docs: Deployments and more!',
         src: 'img/ckan-docker/ckan-docker-logo.png',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'sidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'CKAN Docs',
         },
         {
-          href: 'https://github.com/${organizationName}/${projectName}/blob/main/CKAN_Docs.pdf',
-          label: 'DownloadPdf',
+          type: 'html',
           position: 'right',
+          value: '<FAIcon icon="fa-brands fa-github" size="4x" />',
         },
         {
-          href: 'https://github.com/${organizationName}/${projectName}',
-          label: 'GitHub',
+          href: `https://github.com/${organizationName}/${projectName}/blob/main/static/pdf/CKAN_Docs.pdf`,
+          'aria-label': 'Download PDF',
+          title: 'PDF Download',
+          className: 'navbar__icon navbar__github',
           position: 'right',
+          html: '<i class="fa fa-file-pdf-o"></i>',
         },
+        {
+          href: `https://github.com/${organizationName}/${projectName}`,
+          'aria-label': 'GitHub repository',
+          title: 'GitHub repository',
+          className: 'navbar__icon navbar__github',
+          position: 'right',
+          html: '<i class="fa fa-github"></i>',
+        },
+        
+        // Add a dropdown with locales
+        // {
+        //   type: 'localeDropdown',
+        // },
       ],
     },
     footer: {
@@ -88,17 +102,25 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'CKAN Docs: Deployments and more!',
+              to: '/intro',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'More info',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/${organizationName}/${projectName}',
+              label: 'CKAN documentation',
+              href: `https://docs.ckan.org/en/latest/contents.html`,
+            },
+            {
+              label: 'CKAN - The open source DMS',
+              href: `https://ckan.org/`,
+            },
+            {
+              label: 'Open Knowledge Foundation',
+              href: `https://okfn.org/`,
             },
           ],
         },

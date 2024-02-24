@@ -22,8 +22,39 @@ This section covers various methods for deploying CKAN:
 ## API information
 Here you can find complete documentation for the CKAN API, including endpoints, parameters and examples of use with Swagger [^3].
 
-## Additional Information
-This section includes supplementary information, tips, best practices, and troubleshooting guides for working with CKAN.
+## Doc deployment
+This documentation is deployed using GitHub Pages. To deploy the documentation, run the following commands:
+
+```bash
+
+# To preview your changes as you edit the files, you can run a local development server that will serve your website and reflect the latest changes.
+npm install
+npm run start
+
+
+#To build the website:
+npm run build
+
+
+# It is important to test your build locally before deploying it for production. Docusaurus provides a docusaurus serve command for that:
+npm run serve
+```
+
+## Start your site
+
+Run the development server:
+
+```bash
+cd my-website
+npm run start
+```
+
+> [!TIP]
+>The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+>
+>The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+>
+>Open `docs/intro.md` and edit some lines: the site **reloads automatically** and displays your changes.
 
 ## Contributing
 Contributions to this documentation repository are welcome! If you have suggestions, improvements, or would like to report issues, please feel free to submit a pull request or open an issue.
