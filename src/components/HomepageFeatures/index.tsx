@@ -14,7 +14,16 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/ckan-docker/ckan-docker-logo.svg').default,
     description: (
       <>
-        The rapid deployment of CKAN with Docker and Docker Compose is documented.
+        Get ready to deploy with Docker and Docker Compose.
+      </>
+    ),
+  },
+  {
+    title: 'Installation Guides',
+    Svg: require('@site/static/img/homepage/map-svgrepo-com.svg').default,
+    description: (
+      <>
+        Guides for installing CKAN on various platforms and environments.
       </>
     ),
   },
@@ -31,9 +40,10 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({title, Svg, description}: FeatureItem) {
   return (
-    <div className={clsx('col col--6')}>
+    <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <Svg className={styles.featureSvg} role="img">
+         </Svg>
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>

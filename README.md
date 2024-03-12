@@ -5,9 +5,8 @@ Welcome to the CKAN Deployments! This repository serves as a comprehensive guide
 1. [Introduction](#introduction)
 2. [Deployment Methods](#deployment-methods)
 3. [API Documentation](#api-documentation)
-4. [Additional Information](#additional-information)
-5. [Contributing](#contributing)
-6. [License](#license)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 ## Introduction
 CKAN [^2] is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
@@ -52,7 +51,7 @@ npm run start
 > [!TIP]
 >The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 >
->The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+>The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/. `npm run start -- --locale es` to test the Spanish locale.
 >
 >Open `docs/intro.md` and edit some lines: the site **reloads automatically** and displays your changes.
 

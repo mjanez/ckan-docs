@@ -90,9 +90,9 @@ const config: Config = {
         },
         
         // Add a dropdown with locales
-        // {
-        //   type: 'localeDropdown',
-        // },
+        {
+          type: 'localeDropdown',
+        },
       ],
     },
     footer: {

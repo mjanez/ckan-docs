@@ -1,0 +1,22 @@
+---
+description: CKAN with RHEL
+---
+
+# RHEL installation {#rhel-installation}
+
+## Overview {#overview}
+CKAN is a powerful open data platform that provides a suite of tools to facilitate the publishing, sharing, finding and using of data. This document provides a step-by-step guide to install CKAN on a machine with [Red Hat Enterprise Linux (RHEL) 9.3](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.3_release_notes/index).
+
+:::warning
+This is a **custom installation** with specific extensions for spatial data and metadata [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) [profiles](https://en.wikipedia.org/wiki/Geospatial_metadata). For official installations see [CKAN Documentation: Installation](https://docs.ckan.org/en/latest/maintaining/installing/index.html).
+
+:::
+
+### Available components: {#components}
+[CKAN](https://ckan.org/) is a world-leading open source data portal platform that provides a suite of tools to streamline the publishing, sharing, finding, and using of data. CKAN is a complete out-of-the-box software solution that makes data accessible and usable – by providing tools to streamline publishing, sharing, finding and using data (including storage of data and provision of robust data APIs). CKAN is aimed at data publishers (national and regional governments, companies and organizations) wanting to make their data open and available.
+
+The non-CKAN componentes are as follows:
+* [PostgreSQL](https://www.postgresql.org/about/): A powerful, open source object-relational database system. CKAN uses PostgreSQL to store its data. In a CKAN installation, you would need to set up a PostgreSQL database and configure CKAN to use it.
+* [Solr](https://solr.apache.org/features.html): A popular, open source search platform from the Apache Lucene project. CKAN uses Solr as its search engine. When you create or update datasets, resources, or other objects in CKAN, it updates the Solr index. Then, when you search in CKAN, it queries Solr and shows the results. The Solr index data is stored in a named volume, similar to the PostgreSQL data. In this deployment Solr has a custom spatial schema that allows for geographic searches.
+* [Redis](https://redis.io/docs/about/): An open source, in-memory data structure store, used as a database, cache, and message broker. CKAN uses Redis as a message broker for its background jobs. When CKAN needs to perform a task that may take a long time, such as updating the search index for a large number of datasets, it adds a job to the Redis queue, which can then be processed in the background.
+* [NGINX](https://nginx.org/en/): A free, open-source, high-performance HTTP server and reverse proxy. CKAN uses NGINX as a reverse proxy to route incoming HTTP requests to the CKAN application. NGINX can also serve static files, handle SSL encryption, and load balance requests between multiple CKAN instances. The NGINX configuration for CKAN includes both SSL and non-SSL endpoints, allowing for secure communication over HTTPS.

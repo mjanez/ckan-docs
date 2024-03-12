@@ -20,7 +20,7 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="/intro">
-            CKAN Custom Deployment Guide - Get Started 💨
+            CKAN Custom Deployment Guide - Get Started 🚀
           </Link>
         </div>
       </div>
