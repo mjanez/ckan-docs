@@ -1,0 +1,46 @@
+---
+description: Requisitos para instalar CKAN en RHEL 9.3
+---
+
+# Requisitos del Sistema {#requisitos-del-sistema}
+
+## Prerrequisitos {#prerrequisitos}
+
+Antes de instalar CKAN, asegúrate de tener al menos los siguientes requisitos:
+
+- [RHEL 9.3](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/9.3_release_notes/overview) instalado y configurado.
+- [Python 3.9](https://access.redhat.com/documentation/es-es/red_hat_enterprise_linux/9/html/installing_and_using_dynamic_programming_languages/assembly_installing-and-using-python_installing-and-using-dynamic-programming-languages) o posterior instalado.
+
+## Preparación del Sistema {#preparación-del-sistema}
+
+Antes de instalar CKAN, necesitamos preparar el sistema instalando algunos paquetes necesarios. Los siguientes comandos deben ser ejecutados como root.
+
+Primero, actualizamos los paquetes del sistema:
+
+```bash
+dnf update -y
+```
+
+Luego, instalamos algunos paquetes básicos que son necesarios para la instalación y operación de CKAN:
+
+```bash
+dnf -y install sudo nano git wget gcc openssl-devel libffi-devel make automake cmake
+```
+
+Estos paquetes incluyen herramientas para compilar código (como `gcc`), bibliotecas de seguridad (como `openssl-devel` y `libffi-devel`) y herramientas de utilidad general (como `sudo`, `nano`, `git` y `wget`).
+
+## Instalación de las Dependencias de Python {#instalación-de-las-dependencias-de-python}
+CKAN es una aplicación Python, por lo que necesitamos instalar Python y algunas bibliotecas de Python. Ejecutamos los siguientes comandos para instalar Python, pip (un gestor de paquetes de Python), y `libpq` (una biblioteca necesaria para interactuar con PostgreSQL, la base de datos que utiliza CKAN):
+
+```bash
+dnf -y install python3 python3-pip libpq
+```
+
+Por último, instalamos [`virtualenv`](https://virtualenv.pypa.io/en/latest/) (una herramienta para crear entornos virtuales Python) y [Ansible](https://docs.ansible.com/ansible/latest/getting_started/introduction.html) (una herramienta para la automatización de la configuración del sistema) con pip:
+
+```bash	
+pip3 install virtualenv
+pip3 install ansible
+```
+
+Con esto, hemos preparado el sistema para la instalación de CKAN. En los siguientes pasos, procederemos a instalar el software CKAN propiamente dicho.

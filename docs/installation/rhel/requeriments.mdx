@@ -1,88 +1,50 @@
 ---
-description: How to install Docusaurus locally, and start a Docusaurus site in no time.
+description: How to install and configure CKAN in RHEL 9
 ---
 
-# Installation
+# Requeriments and dependencies
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-Docusaurus consists of a set of npm [packages](https://github.com/facebook/docusaurus/tree/main/packages).
+## Prerequisites: {#prerequisites}
+Before installing CKAN, ensure you have at least the following prerequisites in place:
 
-:::tip
+* [RHEL 9.3](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/9.3_release_notes/overview) installed and configured.
+* [Python 3.9](https://access.redhat.com/documentation/es-es/red_hat_enterprise_linux/9/html/installing_and_using_dynamic_programming_languages/assembly_installing-and-using-python_installing-and-using-dynamic-programming-languages) or later installed.
 
-Use the **[Fast Track](introduction.mdx#fast-track)** to understand Docusaurus in **5 minutes ⏱**!
 
-Use **[docusaurus.new](https://docusaurus.new)** to test Docusaurus immediately in your browser!
+##  System Preparation: {#system-preparation}
+Before installing CKAN, we need to prepare the system by installing some necessary packages. The following commands should be run as root.
 
-:::
-
-## Requirements {#requirements}
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above (which can be checked by running `node -v`). You can use [nvm](https://github.com/nvm-sh/nvm) for managing multiple Node versions on a single machine installed.
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Scaffold project website {#scaffold-project-website}
-
-The easiest way to install Docusaurus is to use the command line tool that helps you scaffold a skeleton Docusaurus website. You can run this command anywhere in a new empty repository or within an existing repository, it will create a new directory containing the scaffolded files.
+First, we update the system packages:
 
 ```bash
-npx create-docusaurus@latest my-website classic
+dnf update -y
 ```
 
-We recommend the `classic` template so that you can get started quickly, and it contains features found in Docusaurus 1. The `classic` template contains `@docusaurus/preset-classic` which includes standard documentation, a blog, custom pages, and a CSS framework (with dark mode support). You can get up and running extremely quickly with the classic template and customize things later on when you have gained more familiarity with Docusaurus.
-
-You can also use the template's TypeScript variant by passing the `--typescript` flag. See [TypeScript support](./typescript-support.mdx) for more information.
+Then, we install some basic packages that are necessary for the installation and operation of CKAN:
 
 ```bash
-npx create-docusaurus@latest my-website classic --typescript
+dnf -y install sudo nano git wget gcc openssl-devel libffi-devel make automake cmake
 ```
 
-:::info Meta-Only
+These packages include tools for compiling code (like `gcc`), libraries for security (like `openssl-devel` and `libffi-devel`), and general utility tools (like `sudo`, `nano`, `git`, and `wget`).
 
-If you are setting up a new Docusaurus website for a Meta open source project, run this command inside an internal repository, which comes with some useful Meta-specific defaults:
+## Python Dependencies Installation: {#python-dependencies-installation}
+CKAN is a Python application, so we need to install Python and some Python libraries. We run the following commands to install Python, pip (a Python package manager), and `libpq` (a library needed to interact with PostgreSQL, the database that CKAN uses):
 
 ```bash
-scarf static-docs-bootstrap
+dnf -y install python3 python3-pip libpq
 ```
 
-:::
+Finally, we install [`virtualenv`](https://virtualenv.pypa.io/en/latest/) (a tool for creating Python virtual environments) and [Ansible](https://docs.ansible.com/ansible/latest/getting_started/introduction.html) (a tool for system configuration automation) with pip:
 
-<details>
-  <summary>Alternative installation commands</summary>
-
-You can also initialize a new project using your preferred project manager:
-
-```bash npm2yarn
-npm init docusaurus
+```bash	
+pip3 install virtualenv
+pip3 install ansible
 ```
 
-</details>
-
-```bash
-my-website
-├── blog
-│   ├── 2019-05-28-hola.md
-│   ├── 2019-05-29-hello-world.md
-│   └── 2020-05-30-welcome.md
-├── docs
-│   ├── doc1.md
-│   ├── doc2.md
-│   ├── doc3.md
-│   └── mdx.md
-├── src
-│   ├── css
-│   │   └── custom.css
-│   └── pages
-│       ├── styles.module.css
-│       └── index.js
-├── static
-│   └── img
-├── docusaurus.config.js
-├── package.json
-├── README.md
-├── sidebars.js
-└── yarn.lock
-```
+With this, we have prepared the system for the installation of CKAN. In the following steps, we will proceed to install CKAN itself.
