@@ -12,23 +12,35 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  */
 const sidebars: SidebarsConfig = {
   sidebar: {
-    'Intro': ['intro'],
+    'Overview': [{
+      type: 'doc',
+      label: 'CKAN deployments',
+      id: 'intro'
+    },],
     'Installation Guides': {
       'Docker with Docker Compose': [
         'installation/docker/intro', 
-        'installation/docker/requeriments',
+        'installation/docker/requirements',
         'installation/docker/ckan',
-        'installation/docker/plugins',
+        'installation/docker/ckan-enhancements',
+        'installation/docker/ckan-addons'
       ],
-      'RHEL': [
-        'installation/rhel/intro', 
-        'installation/rhel/requeriments',
-        'installation/rhel/ckan',
-        'installation/rhel/plugins',
+      'Ansible': [
+        'installation/ansible/intro', 
+        'installation/ansible/requirements',
+        'installation/ansible/ckan',
       ],
     },
     'User guides': {
       'API': ['api/api'],
+    },
+    'Development': {
+      'CKAN': [ 
+        'development/ckan/intro'
+      ],
+      'Extensions': [
+        'development/extensions/harvesters', 
+      ],
     },
   },
 };

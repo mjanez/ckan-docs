@@ -1,15 +1,23 @@
 ---
-description: CKAN with RHEL
+description: CKAN with Ansible
 ---
 
-# RHEL installation {#rhel-installation}
+# Ansible installation {#ansible-installation}
 
 ## Overview {#overview}
-CKAN is a powerful open data platform that provides a suite of tools to facilitate the publishing, sharing, finding and using of data. This document provides a step-by-step guide to install CKAN on a machine with [Red Hat Enterprise Linux (RHEL) 9.3](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.3_release_notes/index).
+CKAN is a powerful open data platform that provides a suite of tools to facilitate the publishing, sharing, finding and using of data. This document provides a step-by-step guide to using an Ansible playbook for the deployment of a custom CKAN for spatial data management in different environments.
+
+### ckan-ansible {#ckan-ansible}
+[`ckan-ansible`](https://github.com/mjanez/ckan-ansible) is a custom Ansible playbook for deploying CKAN in different environments. The playbook is designed to automate the installation and configuration of CKAN, PostgreSQL, Solr, Redis, and NGINX. The playbook is designed to be flexible and customizable, allowing you to configure the deployment to suit your specific requirements.
+
+Deployments available for the following OS:
+  - RedHat Enterprise Linux 9 ([RHEL 9](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9))
+  - RedHat Enterprise Linux 8 ([RHEL 8](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8))
+  - [WIP] Debian 12 ([Bookworm](https://www.debian.org/releases/bookworm/))
+  - [WIP] Ubuntu 20.04 ([Focal Fossa](https://releases.ubuntu.com/20.04/))
 
 :::warning
 This is a **custom installation** with specific extensions for spatial data and metadata [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) [profiles](https://en.wikipedia.org/wiki/Geospatial_metadata). For official installations see [CKAN Documentation: Installation](https://docs.ckan.org/en/latest/maintaining/installing/index.html).
-
 :::
 
 ### Available components: {#components}

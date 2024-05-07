@@ -1,0 +1,35 @@
+.red {
+    color: #c60000;
+  }
+.red[aria-selected='true'] {
+  border-bottom-color: #c60000;
+}
+
+.blue {
+  color: #2e8aeb;
+}
+.blue[aria-selected='true'] {
+  border-bottom-color: #2e8aeb;
+}
+  
+.black {
+  color: #010101;
+}
+.black[aria-selected='true'] {
+  border-bottom-color: #010101;
+}
+
+.grey_blue {
+    color: #146956;
+  }
+.grey_blue[aria-selected='true'] {
+  border-bottom-color: #146956;
+}
+
+.pTab {
+  width: 60%;
+  margin: 0 auto;
+  text-align: justify;
+  text-align-last: center;
+}
+

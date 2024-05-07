@@ -1,0 +1,90 @@
+---
+description: Development CKAN harvesters
+---
+
+# CKAN Harvesters {#ckan-harvesters}
+[`ckanext-harvest`](https://github.com/ckan/ckanext-harvest), is a powerful extension for CKAN, a leading open-source data portal platform. This extension provides a common harvesting framework that allows CKAN extensions to gather data from various sources and bring it into the CKAN instance.
+
+The harvesting process involves two main steps: gathering and fetching. The gather stage identifies all the objects (datasets, files, etc.) that need to be harvested from the source, while the fetch stage retrieves the identified objects.
+
+CKAN Harvester supports a variety of harvesting sources and formats, and it can be extended to support more. It also provides both a Command Line Interface (CLI) and a Web User Interface (WUI) to manage harvesting sources and jobs, making it a versatile tool for data collection and management.
+
+The extension requires CKAN v2.0 or later and can use either Redis or RabbitMQ as its backend. It also offers a range of configuration options to customize the harvesting process according to your needs.
+
+![CKAN Harvesters](/img/ckan-docker/ckan-harvesters.png)
+
+## Custom harvester
+### Overview {#overview}
+A Harvester in the context of CKAN, is a component or process that is responsible for sourcing, collecting, and importing data from various external data sources into the CKAN instance.
+
+The Harvester operates in two main stages: the gather stage and the fetch stage. In the gather stage, the Harvester identifies all the objects (like datasets or files) that need to be harvested from the source. In the fetch stage, the Harvester retrieves the identified objects and brings them into the CKAN instance.
+
+Harvesters can be configured to work with a variety of data sources and formats, making them a versatile tool for populating a CKAN instance with data. They can be used to automate the process of data collection, reducing the need for manual data entry and ensuring that the CKAN instance is regularly updated with fresh data from the source.
+
+In addition to sourcing and importing data, Harvesters also provide features like error notifications, job timeout settings, and the ability to avoid overwriting certain fields, offering a comprehensive solution for data harvesting needs in CKAN.
+
+### Develop a harvester {#develop-harvester}
+To develop a new harvester, you'll need to follow these steps:
+
+1. Create a new Python file in your extension `ckanext/myplugin/harvesters/` directory. The name of the file should be descriptive of the type of data source that the harvester will process. For example, if you're creating a harvester to extract data from a REST API, you might name the file `rest_api_harvester.py`.
+
+2. In this file, you'll need to define a new class that inherits from `ckanext.harvest.harvesters.base.HarvesterBase`. This class should implement at least the following methods:
+
+   - `info(self)`: This method should return a dictionary with information about the harvester. It should include at least the keys 'name', 'title', and 'description'.
+
+   - `gather_stage(self, harvest_job)`: This method is responsible for gathering the identifiers of the objects to be harvested and should return a list of these identifiers.
+
+   - `fetch_stage(self, harvest_object)`: This method receives a harvest object (identified by one of the identifiers returned in the `gather_stage` method) and should return a dictionary with the object's data.
+
+   - `import_stage(self, harvest_object)`: This method receives a harvest object (with the data already extracted in the `fetch_stage` method) and should create or update the corresponding dataset in CKAN.
+
+Here's an example of what a basic harvester might look like:
+
+```python
+from ckanext.harvest.harvesters.base import HarvesterBase
+
+class RestAPIHarvester(HarvesterBase):
+    def info(self):
+        return {
+            'name': 'rest_api',
+            'title': 'REST API Harvester',
+            'description': 'A harvester for REST APIs'
+        }
+
+    def gather_stage(self, harvest_job):
+        # Code to gather the identifiers of the objects to be harvested from the REST API would go here.
+        return []
+
+    def fetch_stage(self, harvest_object):
+        # Code to extract the data of the object from the REST API would go here.
+        return True
+
+    def import_stage(self, harvest_object):
+        # Code to create or update the dataset in CKAN would go here.
+        return True
+```
+
+3. Once you've defined your harvester class, you need to register it so that CKAN recognizes it. This is done in the `plugin.py` file in the` ckanext/harvest/` directory. Here, you should import your harvester class and add it to the `harvesters` list in the `after_map` method of the `HarvestPlugin` class.
+
+```python
+from ckanext.harvest.harvesters import HarvesterBase, rest_api_harvester
+
+class HarvestPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IRoutes, inherit=True)
+
+    harvesters = []
+
+    def after_map(self, map):
+        self._register_harvesters()
+        return map
+
+    def _register_harvesters(self):
+        self.harvesters.append(rest_api_harvester.RestAPIHarvester())
+```
+
+4. Finally, you need to restart CKAN for the changes to take effect.
+
+:::caution
+Please note that this is a very basic example. Depending on the data source, you might need to implement additional logic in the `gather_stage`, `fetch_stage`, and `import_stage` methods. Additionally, you might need to implement other methods, such as `validate_config` (to validate the harvester's configuration) or `get_original_url` (to get the original URL of the harvested objects).
+:::

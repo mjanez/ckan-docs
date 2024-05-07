@@ -2,11 +2,15 @@
 Welcome to the CKAN Deployments! This repository serves as a comprehensive guide for deploying CKAN in various environments, including through source code, Docker, Kubernetes, API documentation, additional information, and tips in a a Docusaurus [^1] website.
 
 ## Contents
-1. [Introduction](#introduction)
-2. [Deployment Methods](#deployment-methods)
-3. [API Documentation](#api-documentation)
-4. [Contributing](#contributing)
-5. [License](#license)
+- [CKAN Docs: Deployments and more!](#ckan-docs-deployments-and-more)
+  - [Contents](#contents)
+  - [Introduction](#introduction)
+  - [Deployment Methods](#deployment-methods)
+  - [API information](#api-information)
+  - [Doc deployment](#doc-deployment)
+  - [Start your site](#start-your-site)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Introduction
 CKAN [^2] is a powerful open-source data management system that makes it easy to publish, share, and use data. This repository aims to provide detailed documentation to facilitate CKAN deployments in different environments.
@@ -14,7 +18,7 @@ CKAN [^2] is a powerful open-source data management system that makes it easy to
 ## Deployment Methods
 This section covers various methods for deploying CKAN:
 
-- **Source Code**: Deploying CKAN from source code (RHEL, Debian, CentOS, SLES).
+- **Source Code**: Deploying CKAN from source code (RHEL, Debian, CentOS, SLES) using [Ansible](https://www.ansible.com/).
 - **Docker**: Deployment of CKAN using Docker containers via Docker Compose.
 - **Kubernetes**: Deploying CKAN on Kubernetes clusters.
 

@@ -66,3 +66,22 @@ html[data-theme='dark'] .navbar__github {
   display: flex;
   padding: 4rem 2rem;
 }
+
+.center-tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.deploy-tab {
+  justify-content: center;
+  text-align: center;
+}
+
+.svg_favicon {
+  display: inline-block;
+  height: 1.2em;
+  width: 1.2em;
+  overflow: visible;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
