@@ -2,11 +2,15 @@
 ¡Bienvenido a CKAN Docs! Este repositorio sirve como una guía completa para el despliegue de CKAN en varios entornos, incluyendo a través del código fuente, Docker, Kubernetes, documentación de la API, información adicional y consejos en un sitio web Docusaurus. [^1]
 
 ## Contenido
-1. [Introducción](#introducción)
-2. [Métodos de despliegue](#métodos-de-despliegue)
-3. [Documentación de la API](#documentación-de-la-api)
-4. [Contribución](#contribución)
-5. [Licencia](#license)
+- [CKAN Docs: Despliegues y mucho más](#ckan-docs-despliegues-y-mucho-más)
+  - [Contenido](#contenido)
+  - [Introducción](#introducción)
+  - [Métodos de despliegue](#métodos-de-despliegue)
+  - [Documentación de la API](#documentación-de-la-api)
+  - [Despliegue de la documentación](#despliegue-de-la-documentación)
+  - [Inicie su sitio](#inicie-su-sitio)
+  - [Contribución](#contribución)
+  - [Licencia](#licencia)
 
 ## Introducción
 CKAN [^2] es un potente sistema de gestión de datos de código abierto que facilita la publicación, el intercambio y el uso de datos. Este repositorio pretende proporcionar documentación detallada para facilitar el despliegue de CKAN en diferentes entornos.
@@ -14,7 +18,7 @@ CKAN [^2] es un potente sistema de gestión de datos de código abierto que faci
 ## Métodos de despliegue
 Esta sección cubre varios métodos para desplegar CKAN:
 
-- Código fuente**: Despliegue de CKAN desde código fuente (RHEL, Debian, CentOS, SLES).
+- Código fuente**: Despliegue de CKAN desde código fuente (RHEL, Debian, CentOS, SLES) mediante [Ansible](https://www.ansible.com/).
 - Docker**: Despliegue de CKAN utilizando contenedores Docker a través de Docker Compose.
 - Kubernetes**: Despliegue de CKAN en clusters Kubernetes.
 

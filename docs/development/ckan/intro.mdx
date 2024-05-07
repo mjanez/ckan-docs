@@ -1,0 +1,60 @@
+---
+description: How to develop CKAN.
+---
+
+# CKAN: Development{#ckan-development}
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+## CKAN architecture
+CKAN's code architecture is designed with specific coding standards in mind to maintain consistency with its intended design and architecture. 
+
+![CKAN Code architecture](https://raw.githubusercontent.com/ckan/ckan/4db37bf2e847d07dca4969e9c3f8ed400b07de3e/doc/images/architecture.png)
+
+
+:::tip
+More info at: [CKAN Code Architecture](https://docs.ckan.org/en/latest/contributing/architecture.html)
+:::
+
+### Blueprints
+CKAN is based on Flask and uses Blueprints. Default blueprints are defined along views in `ckan.views` and extended with the `ckan.plugins.interfaces.IBlueprint` plugin interface.
+
+### Views
+Views process requests by reading and updating data with action functions and return a response by rendering Jinja2 templates. CKAN views are defined in `ckan.views` and templates in `ckan.templates`.
+
+### Template Helper Functions
+Template helper functions are used for code that is reused frequently or code that is too complicated to be included in the templates themselves. They should never perform expensive queries or update data.
+
+### Action Functions
+Whenever some code wants to get, create, update or delete an object from CKAN's model it should do so by calling a function from the `ckan.logic.action` package, and *not* by accessing `ckan.model` directly.
+
+### Logic
+Logic includes action functions, auth functions, background tasks and business logic. Action functions have a uniform interface accepting a dictionary of simple strings lists, dictionaries or files. They return simple dictionaries or raise one of a small number of exceptions.
+
+### Models
+Ideally SQLAlchemy should only be used within `ckan.model` and not from other packages such as `ckan.logic`. 
+
+### Deprecation
+Anything that may be used by extensions, themes or API clients needs to maintain backward compatibility at call-site. To deprecate a function use the `ckan.lib.maintain.deprecated` decorator and add "deprecated" to the function's docstring.
+
+
+## Contributing guide {#contributing-guide}
+CKAN is free open source software and contributions are welcome, whether they’re bug reports, source code, documentation or translations. The following sections will walk you through our processes for making different kinds of contributions to CKAN:
+
+* [Translating CKAN](https://docs.ckan.org/en/latest/contributing/i18n.html)
+* [Testing CKAN](https://docs.ckan.org/en/latest/contributing/test.html)
+* [Writing documentation](https://docs.ckan.org/en/latest/contributing/documentation.html)
+* [CKAN code architecture](https://docs.ckan.org/en/latest/contributing/css.html)
+* [CSS coding standards](https://docs.ckan.org/en/latest/contributing/css.html)
+* [HTML coding standards](https://docs.ckan.org/en/latest/contributing/html.html)
+* [JavaScript coding standards](https://docs.ckan.org/en/latest/contributing/javascript.html)
+* [Python coding standards](https://docs.ckan.org/en/latest/contributing/python.html)
+* [String internationalization](https://docs.ckan.org/en/latest/contributing/string-i18n.html)
+* [Unicode handling](https://docs.ckan.org/en/latest/contributing/unicode.html)
+* [Testing coding standards](https://docs.ckan.org/en/latest/contributing/testing.html)
+* [Frontend development guidelines](https://docs.ckan.org/en/latest/contributing/frontend/index.html)
+* [Database migrations](https://docs.ckan.org/en/latest/contributing/database-migrations.html)
+* [Upgrading CKAN’s dependencies](https://docs.ckan.org/en/latest/contributing/upgrading-dependencies.html)
