@@ -15,9 +15,11 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - name: Generate PDF
-        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs" --outputPDFFilename="static/pdf/CKAN_Docs.pdf"
-      - name: Commit PDF
+      - name: Generate English PDF
+        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs (English)" --outputPDFFilename="static/pdf/CKAN_Docs_en.pdf"
+      - name: Generate Spanish PDF
+        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/es/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs (Español)" --outputPDFFilename="static/pdf/CKAN_Docs_es.pdf"
+      - name: Commit PDFs
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
