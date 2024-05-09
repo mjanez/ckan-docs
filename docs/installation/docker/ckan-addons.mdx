@@ -130,6 +130,15 @@ These parameters can be added to the `.env` file
 
 For more information please see [ckanext-envvars](https://github.com/okfn/ckanext-envvars)
 
+:::caution
+When deploying under a proxy, such as in a corporate environment, to avoid errors when resolving urls with container_names/hostnames associated with the container on internal networks, use the `no_proxy` variable, in lower case, with the names of the services/containers, the IP of the Docker network, etc.
+
+e.g: 
+```yml
+no_proxy="127.0.0.1,192.168.192.0/23,172.0.0.0/0,redis,solr,${DB_CONTAINER_NAME}"`
+```
+:::
+
 
 ## Datastore
 The Datastore database and user is created as part of the entrypoint scripts for the db container.
@@ -152,7 +161,7 @@ To enable harvesters you need to set up in the `.env` file the `CKAN__PLUGINS` v
 :::
 
 
-## ckan-docker tips
+## ckan-docker: Tips
 ### CKAN. Backups
 PostgreSQL offers the command line tools [`pg_dump`](https://www.postgresql.org/docs/current/static/app-pgdump.html) and [`pg_restore`](https://www.postgresql.org/docs/current/static/app-pgrestore.html) for dumping and restoring a database and its content to/from a file.
 
@@ -193,9 +202,10 @@ PostgreSQL offers the command line tools [`pg_dump`](https://www.postgresql.org/
     - `your_postgres_password`: The password for the PostgreSQL user.
     - `/path/to/your/backup/directory`: The path to the directory where you want to store the backup files.
 
-    > [!WARNING]
-    > If you have changed the values of the PostgreSQL container, database or user, change them too.
-    > Check that `zip` package is installed: `sudo apt-get install zip`
+    :::warning
+    If you have changed the values of the PostgreSQL container, database or user, change them too.
+    Check that `zip` package is installed: `sudo apt-get install zip`
+    :::
 
 4. Save and close the file.
 
@@ -205,7 +215,7 @@ PostgreSQL offers the command line tools [`pg_dump`](https://www.postgresql.org/
     chmod +x ckan_backup_custom.sh
     ```
 
-6. Open the crontab for the current user:
+6. Open the `crontab` for the current user:
 
     ```bash
     crontab -e
@@ -217,15 +227,17 @@ PostgreSQL offers the command line tools [`pg_dump`](https://www.postgresql.org/
     0 0 * * * /path/to/your/script/ckan_backup_custom.sh
     ```
 
-  > [!NOTE]
-  > Replace `/path/to/your/script` with the actual path to the `ckan_backup_custom.sh` script.
+    :::note
+    Replace `/path/to/your/script` with the actual path to the `ckan_backup_custom.sh` script.
+    :::
   
 8. Save and close the file.
 
 The cronjob is now set up and will backup your CKAN PostgreSQL database daily at midnight using the custom format. The backups will be stored in the specified directory with the timestamp in the filename.
 
-> [!NOTE]
-> Sample scripts for backing up CKAN: [`doc/scripts`](doc/scripts)
+:::note
+Sample scripts for backing up CKAN: [`doc/scripts`](doc/scripts)
+:::
 
 
 #### Restore a backup
@@ -249,7 +261,7 @@ If need to use a backup, restore it:
 
 
 ### CKAN. Manage new users
-1. Create a new user from the Docker host, for example to create a new user called `user_example`
+* Create a new user from the Docker host, for example to create a new user called `user_example`
 
    ```bash
    docker exec -it <container-id> ckan -c ckan.ini user add user_example email=user_example@localhost
@@ -264,7 +276,7 @@ If need to use a backup, restore it:
    docker exec -it <container-id> ckan -c ckan.ini user remove user_example`
     ```
 
-1. Create a new user from within the ckan container. You will need to get a session on the running container
+* Create a new user from within the ckan container. You will need to get a session on the running container
 
    ```bash
    ckan -c ckan.ini user add user_example email=user_example@localhost`
@@ -277,6 +289,7 @@ If need to use a backup, restore it:
 
 ### Docker Compose. Configure a docker compose service to start on boot
 To have Docker Compose run automatically when you reboot a machine, you can follow the steps below:
+
 1. Create a systemd service file for Docker Compose. You can create a file named `ckan-docker-compose.service` in the `/etc/systemd/system/` folder with the following content:
 
     ```bash

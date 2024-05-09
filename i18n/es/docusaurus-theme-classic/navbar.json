@@ -1,0 +1,10 @@
+{
+  "logo.alt": {
+    "message": "CKAN Docs: ¡Despliegues y mucho más!",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.CKAN Docs": {
+    "message": "CKAN Docs",
+    "description": "Navbar item with label CKAN Docs"
+  }
+}

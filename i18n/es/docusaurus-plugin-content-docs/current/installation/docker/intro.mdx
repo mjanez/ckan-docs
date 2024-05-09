@@ -1,0 +1,51 @@
+---
+description: CKAN con Docker y Docker Compose
+---
+
+# Instalación de Docker y Docker Compose
+
+## Visión general
+Contiene imágenes Docker para los diferentes componentes de CKAN Cloud y un entorno Docker compose (basado en [ckan](https://github.com/ckan/ckan)) para el desarrollo y prueba de portales Open Data.
+
+:::tip
+* Use the **[deploy in 5 minutes](#quick-mode)** to see `ckan-docker` in **5 minutes ⏱**!
+* Or use [Codespaces](https://github.com/features/codespaces) to test `ckan-docker` in your browser:
+ <center><a href='https://codespaces.new/mjanez/ckan-docker'><img src='https://github.com/codespaces/badge.svg' alt='GitHub Codespaces' style={{maxWidth: '100%'}}/></a></center>
+:::
+
+:::warning
+Se trata de una **instalación personalizada de Docker Compose** con extensiones específicas para datos espaciales y metadatos [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) [perfiles](https://en.wikipedia.org/wiki/Geospatial_metadata). Para las instalaciones oficiales, eche un vistazo: [CKAN: Source installation](http://localhost:61256/ckan-docs/intro?ckan-deployment=ckan-official).
+:::
+
+## Componentes disponibles
+
+![Plataforma Docker CKAN](https://raw.githubusercontent.com/mjanez/ckan-docker/master/doc/img/ckan-docker-services.png)
+
+Componentes disponibles:
+* CKAN custom multi-stage build con capacidades espaciales desde [ckan-docker-spatial](https://github.com/mjanez/ckan-docker-spatial), una imagen utilizada como base y construida desde el repo oficial de CKAN. Están disponibles las siguientes versiones de CKAN:
+
+<div style={{display: 'flex', justifyContent: 'center'}}>
+
+| CKAN Version | Type | Docker tag | Notes |
+| --- | --- | --- | --- |
+| 2.9.8 | custom image | `ghcr.io/mjanez/ckan-spatial:ckan-2.9.8` | Stable version with CKAN 2.9.8 |
+| 2.9.9 | custom image | `ghcr.io/mjanez/ckan-docker:ckan-2.9.9` | Stable version with CKAN 2.9.9 |
+| 2.9.10 | custom image | `ghcr.io/mjanez/ckan-docker:ckan-2.9.10` | Stable version with CKAN 2.9.10 |
+| 2.9.11 | custom image | `ghcr.io/mjanez/ckan-docker:ckan-2.9.11` | Stable version with CKAN 2.9.11 |
+| 2.9.11 | latest custom image | `ghcr.io/mjanez/ckan-docker:master` | Latest `ckan-docker` image. |
+
+</div>
+
+Las imágenes que no son de CKAN son las siguientes:
+* PostgreSQL: [Imagen personalizada](https://github.com/mjanez/ckan-docker/blob/master/postgresql/Dockerfile) basada en la imagen oficial de PostgreSQL. Los archivos de base de datos se almacenan en un volumen con nombre.
+* Solr: [Imagen personalizada](https://github.com/mjanez/ckan-docker/blob/master/solr/Dockerfile.spatial) basada en la imagen oficial de CKAN [imagen preconfigurada de Solr](https://github.com/ckan/ckan-solr). Los datos de índice se almacenan en un volumen con nombre y tienen un esquema espacial personalizado actualizado. [^2]
+* Redis: Imagen estándar de Redis
+* NGINX: Última imagen estable de nginx que incluye puntos finales SSL y no SSL.
+* ckan-pycsw: [Imagen personalizada](https://github.com/mjanez/ckan-docker/blob/master/ckan-pycsw/Dockerfile) basada en [pycsw CKAN harvester ISO19139](https://github.com/mjanez/ckan-pycsw) para INSPIRE Metadata CSW Endpoint.
+
+Punto final HTTP opcional ([`docker-compose.apache.yml`](https://github.com/mjanez/ckan-docker/blob/master/docker-compose.apache.yml)):
+* `docker-compose.apache.yml`:
+  * Servidor HTTP Apache: [Custom image](https://github.com/mjanez/ckan-docker/blob/master/apache/Dockerfile) basado en la última imagen httpd estable oficial. Configurado para servir múltiples rutas para el punto final CSW [ckan-pycsw](#ckan-pycsw) (`{CKAN_SITE_URL}/csw`) y CKAN (`{CKAN_SITE_URL}/catalog`). Sólo HTTP.
+
+
+El sitio se configura utilizando variables de entorno que puede establecer en el archivo `.env` para un despliegue NGINX y ckan-pycsw (por defecto `.env.example`), o sustituirlo por el archivo [`.env.apache.example`](https://github.com/mjanez/ckan-docker/blob/master/samples/.env.apache.example) para un despliegue Apache HTTP Server utilizando el archivo Docker Compose: [`docker-compose.apache.yml`](https://github.com/mjanez/ckan-docker/blob/master/docker-compose.apache.yml).

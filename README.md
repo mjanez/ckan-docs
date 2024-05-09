@@ -9,6 +9,7 @@ Welcome to the CKAN Deployments! This repository serves as a comprehensive guide
   - [API information](#api-information)
   - [Doc deployment](#doc-deployment)
   - [Start your site](#start-your-site)
+  - [Translations](#translations)
   - [Contributing](#contributing)
   - [License](#license)
 
@@ -26,10 +27,9 @@ This section covers various methods for deploying CKAN:
 Here you can find complete documentation for the CKAN API, including endpoints, parameters and examples of use with Swagger [^3].
 
 ## Doc deployment
-This documentation is deployed using GitHub Pages. To deploy the documentation, run the following commands:
+This documentation is deployed using GitHub Pages. To deploy the documentation locally run the following commands:
 
 ```bash
-
 # To preview your changes as you edit the files, you can run a local development server that will serve your website and reflect the latest changes.
 npm install
 npm run start
@@ -58,6 +58,68 @@ npm run start
 >The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/. `npm run start -- --locale es` to test the Spanish locale.
 >
 >Open `docs/intro.md` and edit some lines: the site **reloads automatically** and displays your changes.
+
+## Translations
+1. Configure your site and add the navbar item of type `localeDropdown` so that users can select the locale they want :
+```js
+const config: Config = {
+  title: 'CKAN Docs',
+  tagline: 'Deployments and more!',
+  favicon: 'img/favicon.ico',
+
+  ...
+
+    // Even if you don't use internationalization, you can use this field to set
+  // useful metadata like html lang. For example, if your site is Chinese, you
+  // may want to replace "en" with "zh-Hans".
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'fr', 'fa'],
+    localeConfigs: {
+      en: {
+        htmlLang: 'en-GB',
+      },
+      // You can omit a locale (e.g. fr) if you don't need to override the defaults
+      fa: {
+        direction: 'rtl',
+      },
+    },
+  },
+
+  ...
+
+  themeConfig: {
+    navbar: {
+      items: [
+        {
+          type: 'localeDropdown',
+          position: 'left',
+        },
+      ],
+    },
+  },
+};
+```
+
+2. Run the `write-translations` command:
+
+   ```bash
+   npm run write-translations -- --locale fr
+   ```
+
+  It will extract and initialize the JSON translation files that you need to translate. The code.json file at the root includes all translation API calls extracted from the source code, which could either be written by you or provided by the themes, some of which may already be translated by default.
+
+3. Copy your docs Markdown files from `docs/` to `i18n/fr/docusaurus-plugin-content-docs/current`, and translate them:
+
+  ```bash
+  mkdir -p i18n/fr/docusaurus-plugin-content-docs/current
+  cp -r docs/** i18n/fr/docusaurus-plugin-content-docs/current
+  ```
+
+3. Translate the `mdx` files.
+
+> [!TIP]
+> More information about translation and tutorials from i18n in the Docusaurus documentation: [Docusaurus. Internationalisation](https://docusaurus.io/docs/i18n/tutorial)
 
 ## Contributing
 Contributions to this documentation repository are welcome! If you have suggestions, improvements, or would like to report issues, please feel free to submit a pull request or open an issue.

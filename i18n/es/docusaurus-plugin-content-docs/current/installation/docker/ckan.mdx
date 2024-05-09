@@ -1,0 +1,179 @@
+---
+descripción: Cómo instalar CKAN y configurarlo usando Docker.
+---
+
+# CKAN: Instalación y configuración
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+## Clonar y configurar `.env`
+El sitio se configura usando variables de entorno que puedes establecer en el archivo `.env`.
+
+1. Clonar proyecto
+    ```bash
+    cd /ruta/mi/proyecto
+    git clone https://github.com/mjanez/ckan-docker.git & cd ckan-docker
+    ```
+
+2. Copia la plantilla `.env.example` y modifica el `.env` resultante para adaptarlo a tus necesidades.
+
+    ```bash
+    cp .env.ejemplo .env
+    ```
+
+    <Tabs className="unique-tabs">
+      <TabItem value="NGINX">
+      Modify the `.env` variables as needed:
+      ```bash
+      # Host Ports
+      CKAN_PORT_HOST=5000
+      # highlight-start
+      NGINX_PORT_HOST=81
+      NGINX_SSLPORT_HOST=8443
+      # highlight-end
+      APACHE_PORT_HOST=81
+      PYCSW_PORT_HOST=8000
+
+      ...
+
+      #NGINX/APACHE
+      ## Comprueba CKAN__ROOT_PATH y CKANEXT__DCAT__BASE_URI y CKANEXT__SCHEMINGDCAT_GEOMETADATA_BASE_URI. Si no necesita utilizar ubicaciones de dominio, es mejor utilizar la configuración de nginx. Dejar en blanco o utilizar la raíz `/`.
+      # highlight-next-line
+      PROXY_SERVER_NAME=localhost
+      PROXY_CKAN_LOCATION=/catalog
+      PROXY_PYCSW_LOCATION=/csw
+
+      ...
+
+      # CKAN_SITE_URL = http:/ o https:/ + PROXY_SERVER_NAME. Opcionalmente el APACHE_HOST_PORT si es diferente de 80
+      # highlight-next-line
+      CKAN_SITE_URL=http://localhost:81
+      CKAN__ROOT_PATH=/catalog/{{LANG}}
+      CKAN_PORT=5000
+      CKAN__FAVICON=/catalog/base/images/ckan.ico
+      CKAN__SITE_LOGO=/images/default/ckan-logo.png
+      ```
+      </TabItem>
+      <TabItem value="Apache HTTP Server">
+      Modify the `.env` variables as needed:
+      ```bash
+      # Host Ports
+      CKAN_PORT_HOST=5000
+      NGINX_PORT_HOST=81
+      NGINX_SSLPORT_HOST=8443
+      # highlight-next-line
+      APACHE_PORT_HOST=81
+      PYCSW_PORT_HOST=8000
+
+      ...
+
+      #NGINX/APACHE
+      ## Comprueba CKAN__ROOT_PATH y CKANEXT__DCAT__BASE_URI y CKANEXT__SCHEMINGDCAT_GEOMETADATA_BASE_URI. Si no necesita utilizar ubicaciones de dominio, es mejor utilizar la configuración de nginx. Dejar en blanco o utilizar la raíz `/`.
+      # highlight-next-line
+      PROXY_SERVER_NAME=localhost
+      PROXY_CKAN_LOCATION=/catalog
+      PROXY_PYCSW_LOCATION=/csw
+
+      ...
+
+      # CKAN_SITE_URL = http:/ o https:/ + PROXY_SERVER_NAME. Opcionalmente el APACHE_HOST_PORT si es diferente de 80
+      # highlight-next-line
+      CKAN_SITE_URL=http://localhost:81
+      CKAN__ROOT_PATH=/catalog/{{LANG}}
+      CKAN_PORT=5000
+      CKAN__FAVICON=/catalog/base/images/ckan.ico
+      CKAN__SITE_LOGO=/images/default/ckan-logo.png
+      ```
+
+      </TabItem>
+    </Tabs>
+
+    :::warning
+    Usando los valores por defecto en el fichero `.env` obtendrá una instancia de CKAN funcionando. Hay un usuario sysadmin creado por defecto con los valores definidos en `CKAN_SYSADMIN_NAME` y `CKAN_SYSADMIN_PASSWORD` (`ckan_admin` y `test1234` por defecto). Todos los ennvars con `API_TOKEN` se regeneran automáticamente cuando se carga CKAN, no es necesario editarlos.
+     
+    **Esto debe ser obviamente cambiado antes de ejecutar esta configuración como una instancia pública de CKAN.
+    :::
+
+Ahora está listo para proceder con el despliegue.
+
+## Instalar (compilar y ejecutar) CKAN más dependencias
+### Modo base
+Utilice este modo si es un mantenedor y no va a realizar cambios en el código de CKAN o en las extensiones de CKAN.
+
+1. Construye las imágenes:
+    ```bash
+    docker compose build 
+    ```
+2. Arranca los contenedores:
+    ```bash
+    docker compose up
+    ```
+
+Esto iniciará los contenedores en la ventana actual. Por defecto los contenedores se registrarán directamente en esta ventana con cada contenedor
+utilizando un color diferente. También puede utilizar la opción -d "detach mode" es decir: `docker compose up -d` si desea utilizar la ventana actual para otra cosa. 
+para otra cosa.
+
+:::tip
+* O construir y desplegar hasta los contenedores:
+    ```bash
+    docker compose up -d --build
+    ```
+* O utiliza la versión con Apache HTTP Web Server:
+    ```bash
+    docker compose -f docker-compose.apache.yml up -d --build
+    ```
+:::
+
+<details>
+  <summary>Aprende más sobre la configuración de este `ckan-docker`</summary>
+  - [Copia de seguridad de la base de datos CKAN](installation/docker/ckan-addons#ckan-copias-de-seguridad)
+  - [Configurar un servicio docker-compose para que se inicie al arrancar](#docker-compose-configure-a-docker-compose-service-to-start-on-boot)
+
+</details>
+
+### Modo rápido
+Si sólo quieres probar el paquete y ver la funcionalidad general de la plataforma, puedes utilizar la imagen `ckan-docker` del [registro de contenedores de Github](https://github.com/mjanez/ckan-docker/pkgs/container/ckan-docker):
+    
+  ```bash
+  # Edita los envvars en el .env a tu gusto e inicia los contenedores.
+  docker compose -f docker-compose.ghcr.yml up -d --build 
+  ```
+
+:::info
+Descargará la imagen pre-construida y desplegará todos los contenedores. Recuerda usar tu propio dominio cambiando `localhost` en el archivo `.env`.
+:::
+
+### Modo Desarrollo
+Utilice este modo si está realizando cambios en el código de CKAN y creando nuevas extensiones o realizando cambios en el código de extensiones existentes. Este modo también utiliza el archivo `.env` para las opciones de configuración.
+
+Para desarrollar extensiones locales utilice el archivo `docker compose.dev.yml`:
+
+Para construir las imágenes:
+    ```bash
+	docker compose -f docker-compose.dev.yml build
+    ```
+
+Para poner en marcha los contenedores:
+    ```bash
+	docker compose -f docker-compose.dev.yml up
+    ```
+:::tip
+Consulte [CKAN images](/installation/docker/ckan-enhancements#imágenes-ckan) para obtener más detalles sobre lo que ocurre cuando se utiliza el modo de desarrollo.
+:::
+
+## Comprobar que los contenedores están en marcha
+Al final de la secuencia de inicio de contenedores debería haber 6 contenedores ejecutándose.
+
+Después de este paso, CKAN debería estar ejecutándose en `http://{PROXY_SERVER_NAME}/{PROXY_CKAN_LOCATION}` y ckan-pycsw en `http://{PROXY_SERVER_NAME}/{PROXY_PYCSW_LOCATION}`, es decir: http://localhost/catalog o http://localhost/csw.
+
+| CONTAINER   ID | IMAGE                                | COMMAND              | CREATED            | STATUS                      | PORTS                                           | NAMES                                    |
+|----------------|--------------------------------------|----------------------|--------------------|-----------------------------|-------------------------------------------------|------------------------------------------|
+| 0217537f717e   | ckan-docker-nginx/ckan-docker-apache | /docker-entrypoint.… | 6      minutes ago | Up   4    minutes           | 80/tcp,0.0.0.0:80->80/tcp,0.0.0.0:8443->443/tcp | ckan-docker-nginx-1/ckan-docker-apache-1 |
+| 7b06ab2e060a   | ckan-docker-ckan                     | /srv/app/start_ckan… | 6      minutes ago | Up   5    minutes (healthy) | 0.0.0.0:5000->5000/tcp                          | ckan-docker-ckan-1                       |
+| 1b8d9789c29a   | redis:7-alpine                       | docker-entrypoint.s… | 6      minutes ago | Up   4    minutes (healthy) | 6379/tcp                                        | ckan-docker-redis-1                      |
+| 7f162741254d   | ckan/ckan-solr:2.9-solr9-spatial     | docker-entrypoint.s… | 6      minutes ago | Up   4    minutes (healthy) | 8983/tcp                                        | ckan-docker-solr-1                       |
+| 2cdd25cea0de   | ckan-docker-db                       | docker-entrypoint.s… | 6      minutes ago | Up   4    minutes (healthy) | 5432/tcp                                        | ckan-docker-db-1                         |
+| 9cdj25dae6gr   | ckan-docker-pycsw                    | docker-entrypoint.s… | 6      minutes ago | Up   4    minutes (healthy) | 8000/tcp                                        | ckan-docker-pycsw-1                      |
