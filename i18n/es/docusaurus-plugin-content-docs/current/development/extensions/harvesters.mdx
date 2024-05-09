@@ -1,0 +1,90 @@
+---
+description: Desarrollo de cosechadores CKAN
+---
+
+# Cosechadores CKAN
+[`ckanext-harvest`](https://github.com/ckan/ckanext-harvest), es una poderosa extensión para CKAN, una plataforma líder de portal de datos de código abierto. Esta extensión proporciona un marco común de recolección que permite a las extensiones de CKAN recopilar datos de varias fuentes y traerlos a la instancia de CKAN.
+
+El proceso de recolección implica dos pasos principales: recolección y búsqueda. La etapa de recolección identifica todos los objetos (conjuntos de datos, archivos, etc.) que necesitan ser recolectados de la fuente, mientras que la etapa de búsqueda recupera los objetos identificados.
+
+El Recolector de CKAN admite una variedad de fuentes y formatos de recolección, y se puede extender para admitir más. También proporciona tanto una Interfaz de Línea de Comandos (CLI) como una Interfaz de Usuario Web (WUI) para administrar fuentes de recolección y trabajos, lo que lo convierte en una herramienta versátil para la recolección y gestión de datos.
+
+La extensión requiere CKAN v2.0 o posterior y puede usar Redis o RabbitMQ como su backend. También ofrece una gama de opciones de configuración para personalizar el proceso de recolección según sus necesidades.
+
+![Cosechadores CKAN](/img/ckan-docker/ckan-harvesters.png)
+
+## Recolector personalizado
+### Resumen
+Un Recolector en el contexto de CKAN, es un componente o proceso que es responsable de obtener, recopilar e importar datos de varias fuentes de datos externas a la instancia de CKAN.
+
+El Recolector opera en dos etapas principales: la etapa de recolección y la etapa de búsqueda. En la etapa de recolección, el Recolector identifica todos los objetos (como conjuntos de datos o archivos) que necesitan ser recolectados de la fuente. En la etapa de búsqueda, el Recolector recupera los objetos identificados y los trae a la instancia de CKAN.
+
+Los Cosechadores pueden ser configurados para trabajar con una variedad de fuentes de datos y formatos, lo que los convierte en una herramienta versátil para poblar una instancia de CKAN con datos. Se pueden usar para automatizar el proceso de recolección de datos, reduciendo la necesidad de entrada manual de datos y asegurando que la instancia de CKAN se actualice regularmente con datos frescos de la fuente.
+
+Además de obtener e importar datos, los Cosechadores también proporcionan características como notificaciones de errores, configuraciones de tiempo de espera de trabajos y la capacidad de evitar sobrescribir ciertos campos, ofreciendo una solución integral para las necesidades de recolección de datos en CKAN.
+
+### Desarrollar un recolector
+Para desarrollar un nuevo recolector, deberá seguir estos pasos:
+
+1. Cree un nuevo archivo Python en su directorio de extensión `ckanext/myplugin/harvesters/`. El nombre del archivo debe ser descriptivo del tipo de fuente de datos que el recolector procesará. Por ejemplo, si está creando un recolector para extraer datos de una API REST, podría nombrar el archivo `rest_api_harvester.py`.
+
+2. En este archivo, deberá definir una nueva clase que herede de `ckanext.harvest.harvesters.base.HarvesterBase`. Esta clase debe implementar al menos los siguientes métodos:
+
+   - `info(self)`: Este método debe devolver un diccionario con información sobre el recolector. Debe incluir al menos las claves 'name', 'title' y 'description'.
+
+   - `gather_stage(self, harvest_job)`: Este método es responsable de recopilar los identificadores de los objetos a recolectar y debe devolver una lista de estos identificadores.
+
+   - `fetch_stage(self, harvest_object)`: Este método recibe un objeto de recolección (identificado por uno de los identificadores devueltos en el método `gather_stage`) y debe devolver un diccionario con los datos del objeto.
+
+   - `import_stage(self, harvest_object)`: Este método recibe un objeto de recolección (con los datos ya extraídos en el método `fetch_stage`) y debe crear o actualizar el conjunto de datos correspondiente en CKAN.
+
+Aquí hay un ejemplo de cómo podría ser un recolector básico:
+
+```python
+from ckanext.harvest.harvesters.base import HarvesterBase
+
+class RestAPIHarvester(HarvesterBase):
+    def info(self):
+        return {
+            'name': 'rest_api',
+            'title': 'Recolector de API REST',
+            'description': 'Un recolector para APIs REST'
+        }
+
+    def gather_stage(self, harvest_job):
+        # Aquí iría el código para recopilar los identificadores de los objetos a recolectar de la API REST.
+        return []
+
+    def fetch_stage(self, harvest_object):
+        # Aquí iría el código para extraer los datos del objeto de la API REST.
+        return True
+
+    def import_stage(self, harvest_object):
+        # Aquí iría el código para crear o actualizar el conjunto de datos en CKAN.
+        return True
+```
+
+3. Una vez que haya definido su clase de recolector, necesita registrarlo para que CKAN lo reconozca. Esto se hace en el archivo `plugin.py` en el directorio `ckanext/harvest/`. Aquí, debe importar su clase de recolector y agregarla a la lista de `harvesters` en el método `after_map` de la clase `HarvestPlugin`.
+
+```python
+from ckanext.harvest.harvesters import HarvesterBase, rest_api_harvester
+
+class HarvestPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IRoutes, inherit=True)
+
+    harvesters = []
+
+    def after_map(self, map):
+        self._register_harvesters()
+        return map
+
+    def _register_harvesters(self):
+        self.harvesters.append(rest_api_harvester.RestAPIHarvester())
+```
+
+4. Finalmente, necesita reiniciar CKAN para que los cambios surtan efecto.
+
+:::caution
+Tenga en cuenta que este es un ejemplo muy básico. Dependiendo de la fuente de datos, es posible que deba implementar lógica adicional en los métodos `gather_stage`, `fetch_stage` y `import_stage`. Además, es posible que deba implementar otros métodos, como `validate_config` (para validar la configuración del recolector) o `get_original_url` (para obtener la URL original de los objetos recolectados).
+:::

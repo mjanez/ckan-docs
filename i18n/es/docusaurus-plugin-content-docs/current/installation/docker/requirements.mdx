@@ -1,0 +1,30 @@
+---
+description: Requisitos y dependencias de los paquetes.
+---
+
+# Requisitos
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+[`ckan-docker`](https://github.com/mjanez/ckan-docker) consiste en un conjunto de contenedores desplegados con [docker](https://docs.docker.com/get-docker/) y [`docker compose`](https://docs.docker.com/compose/).
+
+## Prerrequisitos
+### docker compose *vs* docker-compose
+Todos los comandos de Docker Compose en este documento utilizarán la versión V2 de Compose, es decir: `docker compose`. La versión anterior (V1) utilizaba el comando `docker-compose`. Por favor, consulte [Docker Compose](https://docs.docker.com/compose/compose-v2/) para
+más información.
+
+### Instalar docker-engine
+Siga las [instrucciones de instalación](https://docs.docker.com/get-docker/) de su entorno para instalar Docker Engine.
+
+Para verificar que la instalación de Docker se ha realizado correctamente, ejecute `docker run hello-world` y `docker version`. Estos comandos deberían mostrar para el cliente y el servidor.
+
+<details>
+  <summary>Docker/Docker Compose más información</summary>
+
+  Más información sobre <a href="/ckan-docs/installation/docker/docker_basics" target="_blank" rel="noreferrer">Docker/Docker Compose</a> comandos básicos.
+
+</details>
+

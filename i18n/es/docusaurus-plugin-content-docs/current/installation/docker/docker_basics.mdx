@@ -1,0 +1,83 @@
+---
+description: Docker y Docker Componer comandos básicos.
+---
+
+# Docker. Comandos básicos
+## Pasos post-instalación Linux
+[Estos procedimientos opcionales post-instalación](https://docs.docker.com/engine/install/linux-postinstall/) te muestran cómo configurar tu máquina anfitriona Linux para trabajar mejor con Docker. Por ejemplo, gestionar Docker con [un usuario no root](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+### Configurar Docker para que se inicie al arrancar
+```bash
+sudo systemctl enable docker
+
+## Para desactivar este comportamiento, utilice disable en su lugar.
+sudo systemctl disable docker
+```
+
+### Borrar todos los objetos Docker no utilizados (imágenes, contenedores, redes, volúmenes locales)
+```bash
+docker system prune # Borrar todo
+docker system prune -a # Clear all (includes unused and dangling containers)
+
+# Por defecto, los volúmenes no se eliminan para evitar que se borren datos importantes si actualmente no hay ningún contenedor usando el volumen. Use la bandera `--volumes` cuando ejecute el comando para podar volúmenes: `docker system prune -a --volumes`.
+
+docker image prune # Borrar imágenes no utilizadas
+docker container prune # Borrar contenedores no utilizados
+docker volume prune # Borrar volúmenes no utilizados
+docker network prune # Limpia las redes no utilizadas
+```
+
+## Docker Compose. Comandos básicos
+Más información sobre los comandos de Docker Compose en [docker compose reference](https://docs.docker.com/compose/reference/).
+
+```bash
+# Básico. Todos los contenedores o contenedor específico: <contenedor>
+## Inicia los contenedores existentes para un servicio.
+docker compose start <contenedor>
+
+## Reinicia los contenedores existentes para un servicio.
+docker compose restart <contenedor>
+
+## Detiene los contenedores en ejecución sin eliminarlos.
+docker compose stop <contenedor>
+
+## Pausa los contenedores en ejecución de un servicio.
+docker compose pause <contenedor>
+
+## Desactiva los contenedores en pausa de un servicio.
+docker compose unpause <contenedor>
+
+# Visualiza los logs de un contenedor. Es posible recuperar sólo los últimos n segundos u otros
+docker logs [--since 60s] <contenedor> -f 
+
+## Lista los contenedores.
+docker compose ps
+
+## Elimina todo el proyecto docker compose
+docker compose rm <contenedor>
+
+
+## Construye.
+## Construye, (re)crea, inicia y adjunta a contenedores para un servicio.
+docker compose [-f <archivo de docker compose>] up
+
+## Build & up todos los contenedores.
+docker compose [-f <archivo de composición docker>] up -d --build
+
+## Build & up un contenedor especifico.
+docker compose [-f <archivo-composición-docker>] up -d --build <contenedor>.
+
+## Para evitar usar una caché de la build anterior mientras se crea una nueva imagen.
+docker compose [-f <archivo-composición-docker>] build --no-cache
+
+## Construir un proyecto con un prefijo específico de Docker Compose.
+docker compose [-f <archivo_de_composición_docker>] -p <mi_proyecto> up -d --build
+
+## Registrar la construcción
+docker compose build --no-cache &> docker_build.log
+
+
+# Down
+# Detiene los contenedores y elimina los contenedores, redes, volúmenes e imágenes creados por up.
+docker compose [-p <mi_proyecto>] down
+```

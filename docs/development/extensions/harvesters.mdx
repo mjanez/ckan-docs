@@ -2,7 +2,7 @@
 description: Development CKAN harvesters
 ---
 
-# CKAN Harvesters {#ckan-harvesters}
+# CKAN Harvesters
 [`ckanext-harvest`](https://github.com/ckan/ckanext-harvest), is a powerful extension for CKAN, a leading open-source data portal platform. This extension provides a common harvesting framework that allows CKAN extensions to gather data from various sources and bring it into the CKAN instance.
 
 The harvesting process involves two main steps: gathering and fetching. The gather stage identifies all the objects (datasets, files, etc.) that need to be harvested from the source, while the fetch stage retrieves the identified objects.
@@ -14,7 +14,7 @@ The extension requires CKAN v2.0 or later and can use either Redis or RabbitMQ a
 ![CKAN Harvesters](/img/ckan-docker/ckan-harvesters.png)
 
 ## Custom harvester
-### Overview {#overview}
+### Overview
 A Harvester in the context of CKAN, is a component or process that is responsible for sourcing, collecting, and importing data from various external data sources into the CKAN instance.
 
 The Harvester operates in two main stages: the gather stage and the fetch stage. In the gather stage, the Harvester identifies all the objects (like datasets or files) that need to be harvested from the source. In the fetch stage, the Harvester retrieves the identified objects and brings them into the CKAN instance.
@@ -23,7 +23,7 @@ Harvesters can be configured to work with a variety of data sources and formats,
 
 In addition to sourcing and importing data, Harvesters also provide features like error notifications, job timeout settings, and the ability to avoid overwriting certain fields, offering a comprehensive solution for data harvesting needs in CKAN.
 
-### Develop a harvester {#develop-harvester}
+### Develop a harvester
 To develop a new harvester, you'll need to follow these steps:
 
 1. Create a new Python file in your extension `ckanext/myplugin/harvesters/` directory. The name of the file should be descriptive of the type of data source that the harvester will process. For example, if you're creating a harvester to extract data from a REST API, you might name the file `rest_api_harvester.py`.

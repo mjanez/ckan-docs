@@ -1,0 +1,169 @@
+---
+descripción: Mejoras ckan-docker
+---
+
+# ckan-docker: Mejoras
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Prism from 'prismjs';
+```
+
+## Imágenes CKAN
+![Plataforma Docker CKAN](https://raw.githubusercontent.com/mjanez/ckan-docker/master/doc/img/ckan-docker-images.png)
+
+Los archivos de configuración de la imagen Docker utilizados para construir tu proyecto CKAN se encuentran en la carpeta `ckan/`. Hay dos archivos Docker:
+
+* `Dockerfile`: está basado en `mjanez/ckan-base-spatial:<version>`, una imagen base localizada en el [Github Package Registry](https://github.com/mjanez/ckan-docker/pkgs/container/ckan-base-spatial), que tiene instalado CKAN junto con todas sus dependencias, correctamente configurado y ejecutándose en [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) (configuración de producción).
+* `Dockerfile.dev`: está basado en `mjanez/ckan-base-spatial:<version>-dev` también localizado en el Registro de Paquetes de Github, y extiende `mjanez/ckan-base-spatial:<version>` para incluir:
+
+  * Cualquier extensión clonada en la carpeta `./src` se instalará en el contenedor CKAN al arrancar Docker Compose (`docker compose up`). Esto incluye instalar cualquier requisito listado en un archivo `requirements.txt` (o `pip-requirements.txt`) y ejecutar `python setup.py develop`.
+  * CKAN se inicia ejecutando esto: `/usr/bin/ckan -c /srv/app/ckan.ini run -H 0.0.0.0`.
+  * Asegúrese de añadir los plugins locales a la var env `CKAN__PLUGINS` en el archivo `.env`.
+
+* Cualquier cambio personalizado en los scripts que se ejecutan durante el arranque del contenedor puede hacerse en los scripts del directorio `setup/`. Por ejemplo, si quisieras cambiar el puerto en el que se ejecuta CKAN, tendrías que hacer cambios en el archivo yaml de Docker Compose y en el archivo `start_ckan.sh.override`. A continuación, tendría que añadir la siguiente línea a la Dockerfile es decir: `COPY setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh`. El archivo `start_ckan.sh` de la imagen local sustituirá al archivo `start_ckan.sh` incluido en la imagen base.
+
+:::tip
+ Si obtienes un error como ` doesn't have execute permissions`: 
+
+```log
+Daemon error response: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/srv/app/start_ckan.sh": permission denied: unknown
+```
+
+Puede ser necesario dar permisos de ejecución al fichero en el `Dockerfile`:
+
+```dockerfile
+...
+# Anular start_ckan.sh
+COPIAR setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
+EJECUTAR chmod +x ${APP_DIR}/start_ckan.sh
+...
+```
+:::
+
+## Mejora de las imágenes CKAN
+### Ampliación de las imágenes base
+Puedes modificar los archivos docker para construir tu propia imagen personalizada adaptada a tu proyecto, instalando cualquier extensión o requisito extra que necesites. Por ejemplo, aquí es donde se actualizaría para utilizar una imagen base CKAN diferente, es decir: `ckan/ckan-base-spatial:<nueva versión>`.
+
+Para realizar pasos extra de inicialización puedes añadir scripts a tus imágenes personalizadas y copiarlos a la carpeta `/docker-entrypoint.d` (La carpeta debería crearse para ti cuando construyas la imagen). Cualquier archivo `*.sh` y `*.py` de esa carpeta se ejecutará justo después de que se ejecute el script de inicialización principal ([`prerun.py`](https://github.com/ckan/ckan-docker-base/blob/main/ckan-2.9/base/setup/prerun.py)) y justo antes de que se inicien los procesos del servidor web y del supervisor.
+
+Por ejemplo, considere la siguiente imagen personalizada:
+
+```bash
+ckan
+├── docker-entrypoint.d
+│└── setup_validation.sh
+├── Dockerfile
+└── Dockerfile.dev
+```
+
+Queremos instalar una extensión como [ckanext-validation](https://github.com/frictionlessdata/ckanext-validation) que necesita crear tablas de base de datos en tiempo de arranque. Creamos un script `setup_validation.sh` en una carpeta `docker-entrypoint.d` con los comandos necesarios:
+
+```bash
+#!/bin/bash
+
+# Create DB tables if not there
+ckan -c /srv/app/ckan.ini validation init-db 
+```
+
+Y luego en nuestro archivo `Dockerfile.dev` instalamos la extensión y copiamos los scripts de inicialización:
+
+```dockerfile
+FROM ckan/ckan-base-spatial:2.9.11
+
+RUN pip install -e git+https://github.com/frictionlessdata/ckanext-validation.git#egg=ckanext-validation && \
+    pip install -r https://raw.githubusercontent.com/frictionlessdata/ckanext-validation/master/requirements.txt
+
+COPY docker-entrypoint.d/* /docker-entrypoint.d/
+```
+:::tip
+Hay una serie de ejemplos de ampliación comentados en el archivo [`Dockerfile.dev`](https://github.com/mjanez/ckan-docker/blob/master/ckan/Dockerfile.dev)
+:::
+
+### Aplicación de parches
+Cuando construyas las imágenes CKAN específicas de tu proyecto (las definidas en la carpeta `ckan/`), puedes aplicar parches 
+al núcleo de CKAN o a cualquiera de las extensiones creadas. Para ello, cree una carpeta dentro de `ckan/patches` con el nombre del paquete a parchear (es decir, `ckan/`).
+paquete a parchear (por ejemplo `ckan` o `ckanext-??`). Dentro puede colocar los archivos de parche que se aplicarán al construir
+las imágenes. Los parches se aplicarán en orden alfabético, por lo que puede anteponerles un prefijo secuencial si es necesario.
+
+Por ejemplo, vea la siguiente carpeta de imágenes de ejemplo:
+
+```bash
+ckan
+├── patches
+│   ├── ckan
+│   │   ├── 01_datasets_per_page.patch
+│   │   ├── 02_groups_per_page.patch
+│   │   ├── 03_or_filters.patch
+│   └── ckanext-harvest
+│       └── 01_resubmit_objects.patch
+├── setup
+├── Dockerfile
+└── Dockerfile.dev
+```
+
+:::info
+Git diff es un comando para mostrar los cambios entre dos fuentes dentro del repositorio Git. Las fuentes de datos pueden ser dos ramas diferentes, commits, ficheros, etc.
+* Muestra los cambios entre el directorio de trabajo y el área de preparación:
+   ```bash
+   git diff > [archivo.patch]
+   ```
+* Muestra los cambios entre el área de preparación y el repositorio:
+  ```bash
+  git diff --staged [archivo]`
+  ```
+:::
+
+### Aplicación de parches en modo desarrollo
+Para aplicar parches en modo desarrollo, deberá seguir los siguientes pasos:
+
+1. Asegúrese de que sus parches están ubicados en el directorio `ckan/patches`. Los parches deben organizarse en subdirectorios con el nombre del paquete al que van destinados (por ejemplo, `ckan` o `ckanext-??`). Cada archivo de parche debe terminar con la extensión .patch.
+
+    Por ejemplo, la estructura de directorios podría ser la siguiente:
+
+    ```bash
+    ckan
+    ├── patches
+    │   ├── ckan
+    │   │   ├── 01_datasets_per_page.patch
+    │   │   ├── 02_groups_per_page.patch
+    │   │   ├── 03_or_filters.patch
+    │   └── ckanext-harvest
+    │       └── 01_resubmit_objects.patch
+    ├── setup
+    ├── Dockerfile
+    └── Dockerfile.dev
+    ```
+
+2. Navegue hasta el directorio `/src`.
+
+3. Aplique los parches utilizando el comando patch:
+
+    ```bash
+    find /path/to/ckan/patches -name '*.patch' -exec patch -p1 < {} \;
+    ```
+
+    Este comando buscará recursivamente en el directorio `/path/to/ckan/patches` archivos que terminen en `.patch` y los aplicará usando el comando patch. Sustituya `ruta/al/ckan/parches` por la ruta real a su directorio `ckan/parches`.
+
+## Crear una extensión en modo desarrollo
+Puedes usar las instrucciones ckan [extension](https://docs.ckan.org/en/latest/extensions/tutorial.html#creating-a-new-extension) para crear una extensión CKAN, sólo ejecutando el comando dentro del contenedor CKAN y poniendo como salida la carpeta `src/` montada:
+
+  ```bash
+  docker compose -f docker-compose.dev.yml exec ckan-dev /bin/sh -c "ckan -c /srv/app/ckan.ini generate extension --output-dir /srv/app/src_extensions"
+  ```
+
+A continuación, responda a las preguntas para configurar el plugin:
+
+  ```bash
+  Extension's name [must begin 'ckanext-']: ckanext-newextension
+  Author's name []: Joe Bloggs
+  Author's email []: joe@bloggs.com
+  Your Github user or organization name []: joebloggs
+  Brief description of the project []: test creating a new extension
+  List of keywords (separated by spaces) [CKAN]: ckanext-newextension
+  Do you want to include code examples? [y/N]: y
+  
+  Written: /srv/app/src_extensions/ckanext-newextension
+  ```
+
+Los nuevos archivos y directorios de extensión se crean en la carpeta `/srv/app/src_extensions/` en el contenedor en ejecución. También existirán en el directorio local src/ ya que el directorio local `/src` está montado como `/srv/app/src_extensions/` en el contenedor ckan. Es posible que tenga que cambiar el propietario de su carpeta para tener los permisos adecuados.

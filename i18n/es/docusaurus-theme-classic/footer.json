@@ -1,0 +1,30 @@
+{
+  "link.title.Docs": {
+    "message": "Docs",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.More info": {
+    "message": "Más información",
+    "description": "The title of the footer links column with title=More info in the footer"
+  },
+  "link.item.label.CKAN Docs: Deployments and more!": {
+    "message": "CKAN Docs: ¡Despliegues y mucho más!",
+    "description": "The label of footer link with label=CKAN Docs: Deployments and more! linking to /intro"
+  },
+  "link.item.label.CKAN documentation": {
+    "message": "Documentación oficial de CKAN",
+    "description": "The label of footer link with label=CKAN documentation linking to https://docs.ckan.org/en/latest/contents.html"
+  },
+  "link.item.label.CKAN - The open source DMS": {
+    "message": "CKAN - El DMS de código abierto",
+    "description": "The label of footer link with label=CKAN - The open source DMS linking to https://ckan.org/"
+  },
+  "link.item.label.Open Knowledge Foundation": {
+    "message": "Fundación Conocimiento Abierto (Open Knowledge Foundation)",
+    "description": "The label of footer link with label=Open Knowledge Foundation linking to https://okfn.org/"
+  },
+  "copyright": {
+    "message": "Copyright © 2024 CKAN Docs!. Construido con Docusaurus.",
+    "description": "The footer copyright"
+  }
+}

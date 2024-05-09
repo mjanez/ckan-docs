@@ -1,40 +1,29 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import Translate, {translate} from '@docusaurus/Translate';
 
 type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-  description: JSX.Element;
+  description: string;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'CKAN in 5 minutes!',
+    title: translate({message: 'CKAN in 5 minutes!'}),
     Svg: require('@site/static/img/ckan-docker/ckan-docker-logo.svg').default,
-    description: (
-      <>
-        Get ready to deploy with Docker and Docker Compose.
-      </>
-    ),
+    description: translate({message: 'Get ready to deploy CKAN with Docker and Ansible.'}),
   },
   {
-    title: 'Installation Guides',
+    title: translate({message: 'Installation Guides'}),
     Svg: require('@site/static/img/homepage/map-svgrepo-com.svg').default,
-    description: (
-      <>
-        Guides for installing CKAN on various platforms and environments.
-      </>
-    ),
+    description: translate({message: 'Guides for installing CKAN on various platforms and environments.'}),
   },
   {
-    title: 'API Help',
+    title: translate({message: 'API Help'}),
     Svg: require('@site/static/img/homepage/api-svgrepo-com.svg').default,
-    description: (
-      <>
-        Documentation and tips to help you get using the CKAN API.
-      </>
-    ),
+    description: translate({message: 'Documentation and tips to help you get using the CKAN API.'}),
   }
 ];
 
@@ -46,7 +35,7 @@ function Feature({title, Svg, description}: FeatureItem) {
          </Svg>
       </div>
       <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
+        <Heading as="h3"><Translate>{title}</Translate></Heading>
         <p>{description}</p>
       </div>
     </div>

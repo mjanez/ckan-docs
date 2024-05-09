@@ -1,36 +1,36 @@
-# CKAN Docs: Despliegues y mucho más
-¡Bienvenido a CKAN Docs! Este repositorio sirve como una guía completa para el despliegue de CKAN en varios entornos, incluyendo a través del código fuente, Docker, Kubernetes, documentación de la API, información adicional y consejos en un sitio web Docusaurus. [^1]
+# Documentación de CKAN: Implementaciones y más!
+¡Bienvenido a las implementaciones de CKAN! Este repositorio sirve como una guía completa para implementar CKAN en varios entornos, incluyendo a través del código fuente, Docker, Kubernetes, documentación de la API, información adicional y consejos en un sitio web de Docusaurus [^1].
 
 ## Contenido
-- [CKAN Docs: Despliegues y mucho más](#ckan-docs-despliegues-y-mucho-más)
+- [Documentación de CKAN: Implementaciones y más!](#documentación-de-ckan-implementaciones-y-más)
   - [Contenido](#contenido)
   - [Introducción](#introducción)
-  - [Métodos de despliegue](#métodos-de-despliegue)
-  - [Documentación de la API](#documentación-de-la-api)
-  - [Despliegue de la documentación](#despliegue-de-la-documentación)
+  - [Métodos de implementación](#métodos-de-implementación)
+  - [Información de la API](#información-de-la-api)
+  - [Implementación de la documentación](#implementación-de-la-documentación)
   - [Inicie su sitio](#inicie-su-sitio)
-  - [Contribución](#contribución)
+  - [Traducciones](#traducciones)
+  - [Contribuir](#contribuir)
   - [Licencia](#licencia)
 
 ## Introducción
-CKAN [^2] es un potente sistema de gestión de datos de código abierto que facilita la publicación, el intercambio y el uso de datos. Este repositorio pretende proporcionar documentación detallada para facilitar el despliegue de CKAN en diferentes entornos.
+CKAN [^2] es un potente sistema de gestión de datos de código abierto que facilita la publicación, el intercambio y el uso de datos. Este repositorio tiene como objetivo proporcionar documentación detallada para facilitar las implementaciones de CKAN en diferentes entornos.
 
-## Métodos de despliegue
-Esta sección cubre varios métodos para desplegar CKAN:
+## Métodos de implementación
+Esta sección cubre varios métodos para implementar CKAN:
 
-- Código fuente**: Despliegue de CKAN desde código fuente (RHEL, Debian, CentOS, SLES) mediante [Ansible](https://www.ansible.com/).
-- Docker**: Despliegue de CKAN utilizando contenedores Docker a través de Docker Compose.
-- Kubernetes**: Despliegue de CKAN en clusters Kubernetes.
+- **Código fuente**: Implementación de CKAN a partir del código fuente (RHEL, Debian, CentOS, SLES) utilizando [Ansible](https://www.ansible.com/).
+- **Docker**: Implementación de CKAN utilizando contenedores Docker a través de Docker Compose.
+- **Kubernetes**: Implementación de CKAN en clústeres de Kubernetes.
 
-## Documentación de la API
-Aquí puedes encontrar la documentación completa de la API CKAN, incluyendo endpoints, parámetros y ejemplos de uso con Swagger [^3].
+## Información de la API
+Aquí puede encontrar la documentación completa de la API de CKAN, incluyendo los puntos finales, los parámetros y ejemplos de uso con Swagger [^3].
 
-## Despliegue de la documentación
-Esta documentación se despliega utilizando GitHub Pages. Para desplegar la documentación, ejecuta los siguientes comandos:
+## Implementación de la documentación
+Esta documentación se implementa utilizando GitHub Pages. Para implementar la documentación localmente ejecute los siguientes comandos:
 
 ```bash
-
-# Para previsualizar tus cambios a medida que editas los archivos, puedes ejecutar un servidor de desarrollo local que servirá a tu sitio web y reflejará los últimos cambios.
+# Para previsualizar sus cambios mientras edita los archivos, puede ejecutar un servidor de desarrollo local que servirá su sitio web y reflejará los últimos cambios.
 npm install
 npm run start
 
@@ -39,7 +39,7 @@ npm run start
 npm run build
 
 
-# Es importante probar su construcción localmente antes de desplegarlo para la producción. Docusaurus proporciona un comando docusaurus serve para ello:
+# Es importante probar su construcción localmente antes de implementarla para producción. Docusaurus proporciona un comando docusaurus serve para eso:
 npm run serve
 ```
 
@@ -48,23 +48,85 @@ npm run serve
 Ejecute el servidor de desarrollo:
 
 ```bash
-cd mi-sitio web
+cd my-website
 npm run start
 ```
 
-> [!TIP]
->El comando `cd` cambia el directorio con el que estás trabajando. Con el fin de trabajar con su sitio Docusaurus recién creado, tendrá que navegar por el terminal allí.
+> [!CONSEJO]
+>El comando `cd` cambia el directorio con el que está trabajando. Para trabajar con su nuevo sitio de Docusaurus, deberá navegar el terminal allí.
 >
->El comando `npm run start` construye tu sitio web localmente y lo sirve a través de un servidor de desarrollo, listo para que lo veas en http://localhost:3000/. El comando `npm run start -- --locale es` para probar la configuración regional española.
+>El comando `npm run start` construye su sitio web localmente y lo sirve a través de un servidor de desarrollo, listo para que lo vea en http://localhost:3000/. `npm run start -- --locale es` para probar la localización en español.
 >
->Abre `docs/intro.md` y edita algunas líneas: el sitio **se recarga automáticamente** y muestra tus cambios.
+>Abra [`docs/intro.md`](command:_github.copilot.openSymbolFromReferences?%5B%7B%22%24mid%22%3A1%2C%22path%22%3A%22%2Fsrv%2Fdev-disk-by-uuid-5c15638b-b21a-4433-a2e1-ae29c41c736c%2Fcode-server%2Fworkspace%2Fdev_ckan%2Fckan-docs%2FREADME.md%22%2C%22scheme%22%3A%22file%22%7D%2C%7B%22line%22%3A0%2C%22character%22%3A0%7D%5D "README.md") y edite algunas líneas: el sitio **se recarga automáticamente** y muestra sus cambios.
 
-## Contribución
-Las contribuciones a este repositorio de documentación son bienvenidas. Si tiene sugerencias, mejoras o desea informar de algún problema, no dude en enviar una solicitud de extracción o abrir una incidencia.
+## Traducciones
+1. Configure su sitio y agregue el elemento de la barra de navegación de tipo `localeDropdown` para que los usuarios puedan seleccionar la localización que desean :
+```js
+const config: Config = {
+  title: 'Documentación de CKAN',
+  tagline: 'Implementaciones y más!',
+  favicon: 'img/favicon.ico',
+
+  ...
+
+    // Incluso si no utiliza la internacionalización, puede usar este campo para establecer
+  // metadatos útiles como el idioma html. Por ejemplo, si su sitio es chino, puede
+  // querer reemplazar "en" por "zh-Hans".
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'fr', 'fa'],
+    localeConfigs: {
+      en: {
+        htmlLang: 'en-GB',
+      },
+      // Puede omitir una localización (por ejemplo, fr) si no necesita sobrescribir los valores predeterminados
+      fa: {
+        direction: 'rtl',
+      },
+    },
+  },
+
+  ...
+
+  themeConfig: {
+    navbar: {
+      items: [
+        {
+          type: 'localeDropdown',
+          position: 'left',
+        },
+      ],
+    },
+  },
+};
+```
+
+2. Ejecute el comando `write-translations`:
+
+   ```bash
+   npm run write-translations -- --locale fr
+   ```
+
+  Extraerá e inicializará los archivos de traducción JSON que necesita traducir. El archivo code.json en la raíz incluye todas las llamadas a la API de traducción extraídas del código fuente, que podrían haber sido escritas por usted o proporcionadas por los temas, algunas de las cuales ya pueden estar traducidas por defecto.
+
+3. Copie sus archivos Markdown de los documentos de [`docs/`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fsrv%2Fdev-disk-by-uuid-5c15638b-b21a-4433-a2e1-ae29c41c736c%2Fcode-server%2Fworkspace%2Fdev_ckan%2Fckan-docs%2Fdocs%2F%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/srv/dev-disk-by-uuid-5c15638b-b21a-4433-a2e1-ae29c41c736c/code-server/workspace/dev_ckan/ckan-docs/docs/") a `i18n/fr/docusaurus-plugin-content-docs/current`, y tradúzcalos:
+
+  ```bash
+  mkdir -p i18n/fr/docusaurus-plugin-content-docs/current
+  cp -r docs/** i18n/fr/docusaurus-plugin-content-docs/current
+  ```
+
+3. Traduzca los archivos `mdx`.
+
+> [!CONSEJO]
+> Más información sobre la traducción y tutoriales de i18n en la documentación de Docusaurus: [Docusaurus. Internacionalización](https://docusaurus.io/docs/i18n/tutorial)
+
+## Contribuir
+¡Las contribuciones a este repositorio de documentación son bienvenidas! Si tiene sugerencias, mejoras o le gustaría informar de problemas, no dude en enviar una solicitud de extracción o abrir un problema.
 
 ## Licencia
-Esta documentación está bajo licencia [GNU Affero General Public License (AGPL)](https://www.gnu.org/licenses/agpl-3.0.html).
+Esta documentación está licenciada bajo la [Licencia Pública General Affero de GNU (AGPL)](https://www.gnu.org/licenses/agpl-3.0.html).
 
 [^1]: [Docusaurus](https://docusaurus.io/)
-[^2]: [CKAN: An open source DMS](https://ckan.org/)
+[^2]: [CKAN: Un DMS de código abierto](https://ckan.org/)
 [^3]: [Swagger](https://swagger.io/).

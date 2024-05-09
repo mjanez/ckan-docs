@@ -6,6 +6,7 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
+import Translate, {translate} from '@docusaurus/Translate';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -13,14 +14,14 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          {siteConfig.title}
+          <Translate>{siteConfig.title}</Translate>
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p className="hero__subtitle"><Translate>{siteConfig.tagline}</Translate></p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
             to="/intro">
-            CKAN Custom Deployment Guide - Get Started 🚀
+            <Translate>CKAN Custom Deployment Guide - Get Started 🚀</Translate>
           </Link>
         </div>
       </div>
@@ -32,8 +33,8 @@ export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Welcome to ${siteConfig.title}`}
-      description="Learn how to deploy your own custom CKAN instance.">
+      title={translate({message: `Welcome to ${siteConfig.title}`})}
+      description={translate({message: "Learn how to deploy your own custom CKAN instance."})}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />

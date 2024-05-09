@@ -1,0 +1,30 @@
+---
+description: CKAN con Ansible
+---
+
+# Instalación de Ansible
+
+## Resumen
+CKAN es una poderosa plataforma de datos abiertos que proporciona un conjunto de herramientas para facilitar la publicación, compartición, búsqueda y uso de datos. Este documento proporciona una guía paso a paso para utilizar un playbook de Ansible para el despliegue de un CKAN personalizado para la gestión de datos espaciales en diferentes entornos.
+
+### ckan-ansible
+[`ckan-ansible`](https://github.com/mjanez/ckan-ansible) es un playbook personalizado de Ansible para desplegar CKAN en diferentes entornos. El playbook está diseñado para automatizar la instalación y configuración de CKAN, PostgreSQL, Solr, Redis y NGINX. El playbook está diseñado para ser flexible y personalizable, permitiéndote configurar el despliegue para adaptarlo a tus requisitos específicos.
+
+Despliegues disponibles para los siguientes sistemas operativos:
+  - RedHat Enterprise Linux 9 ([RHEL 9](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9))
+  - RedHat Enterprise Linux 8 ([RHEL 8](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8))
+  - [WIP] Debian 12 ([Bookworm](https://www.debian.org/releases/bookworm/))
+  - [WIP] Ubuntu 20.04 ([Focal Fossa](https://releases.ubuntu.com/20.04/))
+
+:::warning
+Esta es una **instalación personalizada** con extensiones específicas para datos espaciales y metadatos [GeoDCAT-AP](https://github.com/SEMICeu/GeoDCAT-AP)/[INSPIRE](https://github.com/INSPIRE-MIF/technical-guidelines) [perfiles](https://es.wikipedia.org/wiki/Metadatos_espaciales). Para instalaciones oficiales, consulte [CKAN Documentación: Instalación](https://docs.ckan.org/en/latest/maintaining/installing/index.html).
+:::
+
+### Componentes disponibles:
+[CKAN](https://ckan.org/) es una plataforma líder mundial de portal de datos de código abierto que proporciona un conjunto de herramientas para agilizar la publicación, compartición, búsqueda y uso de datos. CKAN es una solución de software completa lista para usar que hace que los datos sean accesibles y utilizables, proporcionando herramientas para agilizar la publicación, compartición, búsqueda y uso de datos (incluyendo el almacenamiento de datos y la provisión de robustas APIs de datos). CKAN está dirigido a los publicadores de datos (gobiernos nacionales y regionales, empresas y organizaciones) que quieren hacer sus datos abiertos y disponibles.
+
+Los componentes no-CKAN son los siguientes:
+* [PostgreSQL](https://www.postgresql.org/about/): Un poderoso sistema de base de datos objeto-relacional de código abierto. CKAN utiliza PostgreSQL para almacenar sus datos. En una instalación de CKAN, necesitarías configurar una base de datos PostgreSQL y configurar CKAN para usarla.
+* [Solr](https://solr.apache.org/features.html): Una popular plataforma de búsqueda de código abierto del proyecto Apache Lucene. CKAN utiliza Solr como su motor de búsqueda. Cuando creas o actualizas conjuntos de datos, recursos u otros objetos en CKAN, actualiza el índice de Solr. Luego, cuando buscas en CKAN, consulta a Solr y muestra los resultados. Los datos del índice de Solr se almacenan en un volumen nombrado, similar a los datos de PostgreSQL. En este despliegue, Solr tiene un esquema espacial personalizado que permite búsquedas geográficas.
+* [Redis](https://redis.io/docs/about/): Una tienda de estructura de datos en memoria de código abierto, utilizada como base de datos, caché y broker de mensajes. CKAN utiliza Redis como broker de mensajes para sus trabajos en segundo plano. Cuando CKAN necesita realizar una tarea que puede llevar mucho tiempo, como actualizar el índice de búsqueda para un gran número de conjuntos de datos, añade un trabajo a la cola de Redis, que luego puede ser procesado en segundo plano.
+* [NGINX](https://nginx.org/en/): Un servidor HTTP y proxy inverso de alto rendimiento, gratuito y de código abierto. CKAN utiliza NGINX como un proxy inverso para enrutar las solicitudes HTTP entrantes a la aplicación CKAN. NGINX también puede servir archivos estáticos, manejar la encriptación SSL y balancear las solicitudes entre múltiples instancias de CKAN. La configuración de NGINX para CKAN incluye tanto puntos finales SSL como no SSL, permitiendo una comunicación segura a través de HTTPS.

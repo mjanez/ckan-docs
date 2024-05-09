@@ -1,0 +1,58 @@
+---
+description: Cómo desarrollar CKAN.
+---
+
+# CKAN: Desarollo
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+## Arquitectura del código de CKAN
+La arquitectura de código de CKAN está diseñada con ciertos estándares de codificación en mente para mantener la consistencia con su diseño y arquitectura previstos.
+
+![Arquitectura del código CKAN](https://raw.githubusercontent.com/ckan/ckan/4db37bf2e847d07dca4969e9c3f8ed400b07de3e/doc/images/architecture.png)
+
+:::tip
+Más información en: [CKAN Code Architecture](https://docs.ckan.org/en/latest/contributing/architecture.html)
+:::
+
+### Blueprints
+CKAN se basa en Flask y utiliza Blueprints. Los blueprints predeterminados se definen junto con las vistas en  `ckan.views`  y se extienden con la interfaz de plugin  `ckan.plugins.interfaces.IBlueprint`.
+
+### Vistas (Views)
+Las vistas procesan las solicitudes leyendo y actualizando datos con funciones de acción y devuelven una respuesta renderizando plantillas Jinja2. Las vistas de CKAN se definen en  `ckan.views`  y las plantillas en  `ckan.templates`.
+
+### Funciones de ayuda de plantilla (Helpers)
+Las funciones de ayuda de plantilla se utilizan para el código que se reutiliza con frecuencia o el código que es demasiado complicado para incluirse en las plantillas mismas. Nunca deben realizar consultas costosas o actualizar datos.
+
+### Funciones de acción (Actions)
+Cuando algún código quiere obtener, crear, actualizar o eliminar un objeto del modelo de CKAN, debe hacerlo llamando a una función del paquete  `ckan.logic.action`, y  _no_  accediendo directamente a  `ckan.model`.
+
+### Lógica (Logic)
+La lógica incluye funciones de acción, funciones de autenticación, tareas en segundo plano y lógica de negocio. Las funciones de acción tienen una interfaz uniforme que acepta un diccionario de listas de cadenas simples, diccionarios o archivos. Devuelven diccionarios simples o lanzan una de un pequeño número de excepciones.
+
+### Modelos (Models)
+Idealmente, SQLAlchemy solo debe usarse dentro de  `ckan.model`  y no desde otros paquetes como  `ckan.logic`.
+
+### Deprecación (Deprecated)
+Cualquier cosa que pueda ser utilizada por extensiones, temas o clientes de API necesita mantener la compatibilidad hacia atrás en el sitio de llamada. Para deprecar una función, use el decorador  `ckan.lib.maintain.deprecated`  y agregue "deprecated" a la cadena de documentación de la función.
+
+## Guías de contribución
+CKAN es un software libre de código abierto y se agradecen las contribuciones, ya sean informes de errores, código fuente, documentación o traducciones. Las siguientes secciones te guiarán a través de nuestros procesos para hacer diferentes tipos de contribuciones a CKAN:
+
+* [Traduciendo CKAN](https://docs.ckan.org/en/latest/contributing/i18n.html)
+* [Probando CKAN](https://docs.ckan.org/en/latest/contributing/test.html)
+* [Escribiendo documentación](https://docs.ckan.org/en/latest/contributing/documentation.html)
+* [Arquitectura de código de CKAN](https://docs.ckan.org/en/latest/contributing/css.html)
+* [Estándares de codificación CSS](https://docs.ckan.org/en/latest/contributing/css.html)
+* [Estándares de codificación HTML](https://docs.ckan.org/en/latest/contributing/html.html)
+* [Estándares de codificación JavaScript](https://docs.ckan.org/en/latest/contributing/javascript.html)
+* [Estándares de codificación Python](https://docs.ckan.org/en/latest/contributing/python.html)
+* [Internacionalización de cadenas](https://docs.ckan.org/en/latest/contributing/string-i18n.html)
+* [Manejo de Unicode](https://docs.ckan.org/en/latest/contributing/unicode.html)
+* [Estándares de codificación de pruebas](https://docs.ckan.org/en/latest/contributing/testing.html)
+* [Directrices de desarrollo de frontend](https://docs.ckan.org/en/latest/contributing/frontend/index.html)
+* [Migraciones de base de datos](https://docs.ckan.org/en/latest/contributing/database-migrations.html)
+* [Actualizando las dependencias de CKAN](https://docs.ckan.org/en/latest/contributing/upgrading-dependencies.html)

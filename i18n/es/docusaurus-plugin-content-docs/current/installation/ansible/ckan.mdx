@@ -1,0 +1,77 @@
+---
+description: Cómo instalar y configurar CKAN con Ansible.
+---
+
+# CKAN: Instalación y configuración
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+## Despliegue de CKAN con Ansible
+Clona este repositorio en tu máquina local y edita las variables del archivo `playbook/host_vars/production_01.yml`:
+
+```bash
+git clone https://github.com/mjanez/ckan-ansible.git && cd ckan-ansible
+```
+
+:::caution[Configuración del playbook]
+Recuerda cambiar las variables de configuración de CKAN antes de ejecutar el playbook de Ansible. Específicamente la información del usuario/contraseña del host (`ansible_user`, `ansible_password`, etc.) y la configuración de CKAN: `ckan_sysadmin_name`, `ckan_sysadmin_password` y `ckan_sysadmin_email`. También el `proxy_server_name` y `nginx_port` para un despliegue correcto.
+:::
+
+
+Edita las variables de los hosts en la carpeta `inventory` y añade las direcciones IP o el `hostname` de los servidores de despliegue objetivo para el entorno específico.
+
+Personaliza las configuraciones de despliegue en `host_vars/*` para que coincidan con tus requisitos. Modifica cualquier variable necesaria, como las credenciales de la base de datos, las versiones de CKAN y otros ajustes específicos.
+
+:::warning[Autenticación SSH]
+También, si estás utilizando una autenticación de contraseña SSH para repositorios privados, [crea un par de claves SSH](https://github.com/mjanez/ckan-ansible/blob/main/.ssh/keys/README.md) y copia las claves en `./playbook/roles/common/files/keys`. Los nombres de los archivos del par de claves deben comenzar con id_ (por ejemplo, `id_rsa` + `id_rsa.pub`)
+:::
+
+
+### Ejemplo de despliegue {#ejemplo-despliegue}
+1. Selecciona el entorno que quieres desplegar, por ejemplo: `rhel`.
+
+2. Edita el archivo `playbook/host_vars/production_01.yml`. Indica la ruta a la clave privada SSH si no estás utilizando autenticación por contraseña (`ansible_ssh_private_key_file`/`ansible_ssh_pass` ).
+
+3. Ejecuta el playbook de Ansible para desplegar CKAN en el servidor objetivo. El siguiente comando desplegará CKAN en el servidor objetivo utilizando la configuración del playbook. La bandera `-vvv` se utiliza para una salida detallada:
+
+    ```bash
+    # Ubicación del archivo ansible.cfg basado en el directorio clonado
+    export ANSIBLE_CONFIG=$(pwd)/playbook/ansible.cfg
+
+    # Ubicación si ckan-ansible se clona en el directorio home
+    export ANSIBLE_CONFIG=$HOME/ckan-ansible/playbook/ansible.cfg
+
+    # Ejecuta el playbook de ansible, Verbose con  -vvv
+    ansible-playbook $HOME/ckan-ansible/playbook/playbook.yml
+    ```
+
+    La variable de entorno `ANSIBLE_CONFIG` se utiliza para especificar la ubicación del archivo `ansible.cfg`. Esto es útil cuando tienes varias configuraciones de Ansible y quieres especificar cuál usar, por ejemplo, `rhel-9`, `ubuntu-20.04`, etc.
+
+:::important[host_vars]
+> El archivo `*/host_vars/*.yml` contiene variables de configuración personalizables para el despliegue, incluyendo las credenciales de la base de datos, la versión de CKAN y la configuración del servidor web. Revisa y modifica estas antes de ejecutar el playbook de Ansible.
+:::
+
+## Comprobar que los servicios están en funcionamiento
+Después del despliegue, puedes comprobar el estado de los servicios utilizando el [comando](http://supervisord.org/running.html#running-supervisorctl) `supervisorctl`. Este comando proporciona una interfaz de línea de comandos al sistema de control de procesos Supervisor, que te permite controlar y monitorizar tus servicios.
+
+Los servicios generados por ckan-Ansible incluyen:
+
+- [`ckan`](https://github.com/ckan/ckan), un sistema de gestión de datos de código abierto para alimentar hubs de datos y portales de datos que se sirve a través de uWSGI y NGINX.
+- [`ckan-pycsw`](https://github.com/mjanez/ckan-pycsw), un servicio web completo para catalogar datos geoespaciales. Software para lograr la interoperabilidad con los portales de datos abiertos basados en CKAN. Para hacer esto, `ckan2pycsw` lee datos de una instancia usando la API de CKAN, genera metadatos INSPIRE ISO-19115/ISO-19139 [^3] usando [pygeometa](https://geopython.github.io/pygeometa/), o otro esquema personalizado, y llena una instancia de [pycsw](https://pycsw.org/) que expone los metadatos usando CSW y OAI-PMH.
+- [`ckan-xloader`](https://github.com/ckan/ckanext-xloader), trabajador para cargar rápidamente datos en DataStore. Un reemplazo para DataPusher.
+- Trabajadores utilizados para la recolección remota. El trabajador `ckan_harvester_run` se utiliza para ejecutarse periódicamente, los recolectores y el trabajador `ckan_harvester_fetch` se utiliza para recuperar los datos de los servidores remotos y prepararlos para el trabajador `ckan_harvester_run`. También el trabajador `ckan_harvester_gather` se utiliza para identificar los recursos remotos que necesitan ser recolectados. Finalmente, el trabajador `ckan_harvester_clean_log` se utiliza para limpiar periódicamente los registros de los recolectores.
+
+Para comprobar el estado de estos servicios, puedes utilizar el comando `supervisorctl status`. Aquí tienes un ejemplo:
+```bash
+$ supervisorctl status
+ckan_fetch_consumer              RUNNING   pid 2684195, uptime 0:00:50
+ckan_gather_consumer             RUNNING   pid 2684193, uptime 0:00:50
+ckan_harvester_clean_log         STOPPED   Not started
+ckan_harvester_run               EXITED    May 07 01:12 PM
+ckan_pycsw                       RUNNING   pid 2684197, uptime 0:00:50
+ckan_uwsgi:ckan_uwsgi-00         RUNNING   pid 2684194, uptime 0:00:50
+ckan_xloader:ckan_xloader-00     RUNNING   pid 2684198, uptime 0:00:50
+```

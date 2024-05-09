@@ -2,7 +2,7 @@
 description: How to install CKAN and configure it using Docker.
 ---
 
-# CKAN: Installation and configuration {#ckan-installation-and-configuration}
+# CKAN: Installation and configuration
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -13,14 +13,14 @@ import TabItem from '@theme/TabItem';
 The site is configured using environment variables that you can set in the `.env` file.
 
 1. Clone project
-    ```shell
+    ```bash
     cd /path/to/my/project
     git clone https://github.com/mjanez/ckan-docker.git & cd ckan-docker
     ```
 
 2. Copy the `.env.example` template and modify the resulting `.env` to suit your needs.
 
-    ```shell
+    ```bash
     cp .env.example .env
     ```
 
@@ -129,8 +129,8 @@ window for something else.
 
 <details>
   <summary>Learn more about configuring this `ckan-docker`</summary>
-  - [Backup the CKAN Database](#ckan-backups)
-  - [Configuring a docker compose service to start on boot](#docker-compose-configure-a-docker-compose-service-to-start-on-boot)
+  - [Backup the CKAN Database](installation/docker/ckan-addons#ckan-backups)
+  - [Configuring a docker compose service to start on boot](installation/docker/ckan-addons/docker-compose-configurar-un-servicio-docker-compose-para-que-se-inicie-al-arrancar)
 
 </details>
 
@@ -161,7 +161,7 @@ To start the containers:
 	docker compose -f docker-compose.dev.yml up
     ```
 :::tip
-See [CKAN images](#5-ckan-images) for more details of what happens when using development mode.
+See [CKAN images](/installation/docker/ckan-enhancements#ckan-images) for more details of what happens when using development mode.
 :::
 
 ## Check the containers are running

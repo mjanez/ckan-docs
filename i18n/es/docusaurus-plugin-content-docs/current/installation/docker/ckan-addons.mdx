@@ -1,0 +1,338 @@
+---
+descripción: ckan-docker complementos
+---
+
+# ckan-docker Complementos
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Prism from 'prismjs';
+```
+
+## Depuración
+### Depuración de la Instancia de Desarrollo CKAN con VSCode Dev Containers y debugpy
+La extensión [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) es una potente herramienta que permite a los desarrolladores utilizar un contenedor como entorno de desarrollo completo. Con esta extensión, los desarrolladores pueden abrir cualquier carpeta dentro de un contenedor y aprovechar todas las funciones que ofrece Visual Studio Code. Para ello, los desarrolladores crean un archivo `devcontainer.json` en su proyecto que especifica cómo acceder o crear un contenedor de desarrollo con una pila predefinida de herramientas y tiempo de ejecución. Esto permite a los desarrolladores trabajar en un entorno aislado, asegurando que el entorno de desarrollo es consistente entre los miembros del equipo y que las dependencias del proyecto son fáciles de gestionar.
+
+Desarrollo dentro de un contenedor](https://code.visualstudio.com/assets/docs/devcontainers/containers/architecture-containers.png)
+
+Para configurarlo
+
+1. Instale [VSCode](https://code.visualstudio.com/).
+
+2. Instala la extensión [Remote Development extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) para VSCode.
+
+3. En el directorio de tu proyecto, crea un archivo `devcontainer.json`. Este archivo contendrá la configuración para tu contenedor de desarrollo.
+
+4. En el archivo `devcontainer.json`, especifica la imagen Docker para tu contenedor de desarrollo y cualquier ajuste de configuración adicional, como variables de entorno, puertos a exponer y comandos de inicio.
+
+5. Habilita `debugpy` para tu instancia de desarrollo en tu archivo `.env`:
+
+  ```ini
+  USE_DEBUGPY_FOR_DEV=true
+  ```
+
+6. Arranca los contenedores en [modo desarrollo](#development-mode) e inicia VS Code.
+
+7. Instala la extensión "Dev Container": pulsa `CTRL+SHIFT+X`, escribe "dev container", pulsa "install".
+
+8. Pulse el botón `Open a Remote Window` en la parte inferior izquierda de la ventana de VS Code.
+
+9. Pulsa `Attach to Running Container...` y selecciona tu contenedor ckan-dev, por ejemplo `ckan-docker-ckan-dev-1`.
+
+10. Haz click en el icono `Run and Debug` en el panel izquierdo y luego `create a launch.json`, selecciona `Python Debugger`, `Remote Attach`, host `localhost` y puerto `5678`.
+
+11. Pulsa `F5` o haz click en el menú `Run` y `Start Debugging`.
+
+Ahora puedes establecer puntos de interrupción y depurar remotamente tu instancia de desarrollo CKAN usando VSCode Dev Containers y debugpy.
+
+### pdb
+Añada estas líneas al servicio `ckan-dev` en el archivo docker compose.dev.yml
+
+```yaml
+ports:
+  - "0.0.0.0:${CKAN_PORT}:5000"
+
+stdin_open: true
+tty: true
+```
+
+Depurar con pdb (ejemplo) - Interactuar con `docker attach $(docker container ls -qf name=ckan)`
+
+comando: `python -m pdb /usr/lib/ckan/venv/bin/ckan --config /srv/app/ckan.ini run --host 0.0.0.0 --passthrough-errors`
+
+
+## Reverse proxy
+### NGINX
+La configuración por defecto de Docker Compose ([`docker-compose.yml`](https://github.com/mjanez/ckan-docker/blob/master/docker-compose.yml)) utiliza una imagen NGINX como front-end (es decir: proxy inverso). Incluye HTTPS ejecutándose en el puerto número 8443 y un puerto HTTP (81). Se genera previamente un certificado SSL "autofirmado" y se incluyen los archivos de certificado y clave del servidor. La directiva `server_name` de NGINX (ENV: `PROXY_SERVER_NAME`) y el campo `CN` del certificado SSL se han establecido en 'localhost'. Obviamente, esto no debería utilizarse en producción.
+
+Las ubicaciones del proxy, los puertos y otras opciones de NGINX pueden modificarse en el archivo `.env`:
+```ini
+# Puertos de host
+NGINX_PORT_HOST=81
+NGINX_SSLPORT_HOST=8443
+
+# NGINX
+NGINX_PORT=80
+NGINX_SSLPORT=443
+NGINX_LOG_DIR=/var/log/nginx
+
+# Comprueba CKAN__ROOT_PATH y CKANEXT__DCAT__BASE_URI. Si no necesita utilizar ubicaciones de dominio, es mejor utilizar la configuración de nginx. Dejar en blanco o utilizar la raíz `/`.
+PROXY_SERVER_NAME=localhost
+PROXY_CKAN_LOCATION=/catalog
+PROXY_PYCSW_LOCATION=/csw
+```
+La configuración básica de Docker Compose utiliza una imagen NGINX como front-end (es decir, proxy inverso). Incluye HTTPS ejecutándose en el puerto número 8443. Se genera un certificado SSL "autofirmado" como parte del ENTRYPOINT. La directiva ENV `PROXY_SERVER_NAME`, NGINX `server_name` y el campo `CN` en el certificado SSL se han establecido en 'localhost'. Obviamente, esto no debería utilizarse en producción.
+
+Crear el certificado SSL y los archivos de claves de la siguiente manera:
+`openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=DE/ST=Berlin/L=Berlin/O=None/CN=localhost" -keyout ckan-local.key -out ckan-local.crt`.
+A continuación, los archivos `ckan-local.*` deberán trasladarse al directorio nginx/setup/
+
+
+### Apache HTTP Server
+La configuración de Docker Compose ([`docker-compose.apache.yml`](https://github.com/mjanez/ckan-docker/blob/master/docker-compose.apache.yml)) utiliza una imagen httpd como front-end. Tiene dos rutas para los servicios ckan (ubicación por defecto: `/catalog`) y ckan-pycsw (ubicación por defecto: `/csw`). 
+
+Las ubicaciones del proxy, los puertos y otras opciones del Servidor Web Apache pueden modificarse en el archivo `.env`:
+```ini
+# Puertos de host
+APACHE_PORT_HOST=81
+
+# Apache HTTP Server
+APACHE_VERSION=2.4-alpine
+APACHE_PORT=80
+APACHE_LOG_DIR=/var/log/apache
+
+# Comprueba CKAN__ROOT_PATH y CKANEXT__DCAT__BASE_URI. Si no necesita utilizar ubicaciones de dominio, es mejor utilizar la configuración de nginx. Dejar en blanco o utilizar la raíz `/`.
+PROXY_SERVER_NAME=localhost
+PROXY_CKAN_LOCATION=/catalog
+PROXY_PYCSW_LOCATION=/csw
+```
+
+
+## envvars
+La extensión ckanext-envvars se utiliza en el repositorio base Docker de CKAN para construir las imágenes base.
+Esta extensión comprueba si las variables de entorno se ajustan a un formato esperado y actualiza la configuración CKAN correspondiente con su valor.
+
+Para que la extensión identifique correctamente qué claves env var se corresponden con el formato utilizado para el objeto config, las claves env var deben tener el siguiente formato:
+
+  Todo en mayúsculas  
+  Sustituya los puntos ('.') por dos guiones bajos ('__')  
+  Las claves deben empezar por 'CKAN' o 'CKANEXT', si no es así, puede anteponer '`CKAN___`'. 
+
+Por ejemplo:
+
+  * `CKAN__PLUGINS="envvars image_view text_view recline_view datastore datapusher"`
+  * `CKAN__DATAPUSHER__CALLBACK_URL_BASE=http://ckan:5000`
+  * `CKAN___BEAKER__SESSION__SECRET=CHANGE_ME`
+
+Estos parámetros se pueden añadir al archivo `.env`. 
+
+Para más información, consulte [ckanext-envvars](https://github.com/okfn/ckanext-envvars)
+
+:::caution
+Si el despliegue se encuentra bajo un proxy, como en un entorno corporativo, para evitar errores al resolver urls con container_names/hostnames asociados al contenedor en redes internas, debe utilizarse la variable `no_proxy`, en minusculas, con los nombres de los servicios/contenedores, la ip de la red de docker, etc.
+
+ej:
+```ini
+no_proxy="127.0.0.1,192.168.192.0/23,172.0.0.0/0,redis,solr,${DB_CONTAINER_NAME}"`
+```
+:::
+
+## Datastore
+La base de datos Datastore y el usuario se crean como parte de los scripts de entrada para el contenedor db.
+
+## xloader
+Este despliegue reemplaza DataPusher con XLoader usando Supervisor, más información sobre otras alternativas en la página wiki para esto: https://github.com/ckan/ckan-docker/wiki/Replacing-DataPusher-with-XLoader
+
+## ckan-pycsw
+[ckan-pycsw](https://github.com/mjanez/ckan-pycsw) es un entorno docker compose (basado en [pycsw](https://github.com/geopython/pycsw)) para desarrollo y pruebas con portales CKAN Open Data.
+
+Componentes disponibles:
+* **pycsw**: La aplicación pycsw. Una implementación del servidor [OARec](https://ogcapi.ogc.org/records) y [OGC CSW](https://opengeospatial.org/standards/cat) escrita en Python.
+* **ckan2pycsw**: Software para lograr la interoperabilidad con los portales de datos abiertos basados en CKAN. Para ello, ckan2pycsw lee datos de una instancia utilizando la API CKAN, genera metadatos ISO-19115/ISO-19139 utilizando [pygeometa](https://geopython.github.io/pygeometa/), o un esquema personalizado que se basa en un esquema CKAN personalizado, y rellena una instancia [pycsw](https://pycsw.org/) que expone los metadatos utilizando CSW y OAI-PMH.
+
+## Consumidores de cosecha en un CKAN desplegado
+[ckanext-harvest supervisor](https://github.com/ckan/ckanext-harvest#setting-up-the-harvesters-on-a-production-server) permite recolectar metadatos de múltiples fuentes en un despliegue de producción. Aquí está desplegado [por un consumidor trabajador en el contenedor `ckan`](./ckan/setup/workers/harvester.conf), también la extensión `ckanext-harvest` y otros recolectores personalizados ([`ckanext-schemingdcat`](https://github.com/mjanez/ckanext-schemingdcat?tab=readme-ov-file#harvesters) o [`ckanext-dcat`](https://github.com/ckan/ckanext-dcat#rdf-dcat-harvester)) están incluidos en las imágenes docker de CKAN.
+
+:::consejo
+Para habilitar los harvesters necesitas configurar en el archivo `.env` la variable `CKAN__PLUGINS` con el plugin `harvest`: https://github.com/mjanez/ckan-docker/blob/a18e0c80d9f16b6d9b6471e3148d48fcb83712bd/.env.example#L126-L127
+:::
+
+## ckan-docker: Consejos y trucos
+### CKAN. Copias de seguridad
+PostgreSQL ofrece las herramientas de línea de comandos [`pg_dump`](https://www.postgresql.org/docs/current/static/app-pgdump.html) y [`pg_restore`](https://www.postgresql.org/docs/current/static/app-pgrestore.html) para volcar y restaurar una base de datos y su contenido a/desde un archivo.
+
+
+#### Servicio de copia de seguridad para el contenedor db
+1. Crea un nuevo archivo llamado `ckan_backup_custom.sh` y ábrelo en tu editor de texto preferido.
+
+2. 2. Añade el siguiente código al script, sustituyendo los marcadores de posición por tus valores reales:
+
+    ```bash
+    #!/bin/bash
+
+    # Establecer las variables necesarias
+    CONTAINER_NAME="db"
+    DATABASE_NAME="ckandb"
+    POSTGRES_USER="postgres"
+    POSTGRES_PASSWORD="your_postgres_password"
+    BACKUP_DIRECTORY="/path/to/your/backup/directory"
+    DATE=$(date +%Y%m%d%H%M%S)
+    MONTH=$(date +%m)
+    YEAR=$(date +%Y)
+
+    # Crear el directorio de copia de seguridad mensual si no existe.
+    mkdir -p "$BACKUP_DIRECTORY/monthly/$YEAR-$MONTH"
+
+    # Ejecutar el comando de copia de seguridad
+    docker exec -e PGPASSWORD=$POSTGRES_PASSWORD $CONTAINER_NAME pg_dump -U $POSTGRES_USER -Fc $DATABASE_NAME > "$BACKUP_DIRECTORY/monthly/$YEAR-$MONTH/ckan_backup_$DATE.dump"
+
+    # Comprime los archivos de volcado en un archivo zip
+    cd "$BACKUP_DIRECTORY/monthly/$YEAR-$MONTH" || exit
+    zip "backup_${YEAR}-${MONTH}.zip" *.dump
+
+    # Eliminar los archivos de volcado originales
+    rm -f *.dump
+    ```
+
+3. Sustituya los siguientes marcadores de posición por sus valores reales:
+    - `your_postgres_password`: La contraseña del usuario PostgreSQL.
+    - `/path/to/your/backup/directory`: La ruta al directorio donde desea almacenar los archivos de copia de seguridad.
+
+:::warning
+Si ha cambiado los valores del contenedor PostgreSQL, la base de datos o el usuario, cámbielos también.
+Compruebe que el paquete `zip` está instalado: `sudo apt-get install zip`.
+:::
+
+4. Guarde y cierre el archivo.
+
+5. Haz ejecutable el script:
+
+    ```bash
+    chmod +x ckan_backup_custom.sh
+    ```
+
+6. Abre el `crontab` para el usuario actual:
+
+    ```bash
+    crontab -e
+    ```
+
+7. Añade la siguiente línea para programar la copia de seguridad para que se ejecute diariamente a medianoche (ajusta la programación según sea necesario):
+
+    ```sh
+    0 0 * * * /path/to/your/script/ckan_backup_custom.sh
+    ```
+
+    :::note
+    Sustituye `/ruta/a/tu/script` por la ruta real al script `ckan_backup_custom.sh`.
+    :::
+  
+8. Guarde y cierre el archivo.
+
+El cronjob está ahora configurado y realizará copias de seguridad de su base de datos PostgreSQL CKAN diariamente a medianoche utilizando el formato personalizado. Las copias de seguridad se almacenarán en el directorio especificado con la marca de tiempo en el nombre del archivo.
+
+:::note
+Scripts de ejemplo para realizar copias de seguridad de CKAN: [`doc/scripts`](doc/scripts)
+:::
+
+#### Restaurar una copia de seguridad
+Si necesita utilizar una copia de seguridad, restáurela:
+
+1. Primero limpie la base de datos. **Precaución, esto borrará todos los datos de tu base de datos CKAN.
+
+    ```bash
+    docker exec -it ckan /bin/bash -c "export TERM=xterm; exec bash"
+
+    # Borrar todo en la base de datos CKAN, incluyendo las tablas, para empezar de cero
+    ckan -c $CKAN_INI db clean
+    ```
+
+2. Después de limpiar la base de datos debes hacer [inicializarla](https://docs.ckan.org/en/2.9/maintaining/database-management.html#initialization) o importar un volcado creado previamente.
+
+    ```bash
+    docker exec -i -e PGPASSWORD=$POSTGRES_PASSWORD $POSTGRESQL_CONTAINER_NAME pg_restore -U $POSTGRES_USER --clean --if-exists -d $DATABASE_NAME < /path/to/your/backup/directory/ckan.dump
+    ```
+3. Reinicie el contenedor `ckan`.
+
+
+### CKAN. Gestionar nuevos usuarios
+* Crea un nuevo usuario desde el host Docker, por ejemplo para crear un nuevo usuario llamado `user_example`
+
+   ```bash
+   docker exec -it <container-id> ckan -c ckan.ini user add user_example email=user_example@localhost
+
+   # Usuario administrador
+   docker exec -it <container-id> ckan -c ckan.ini sysadmin add admin_example email=admin_example@localhost name=admin_example
+    ```
+
+   Para eliminar el usuario 'user_example
+
+   ```bash
+   docker exec -it <container-id> ckan -c ckan.ini user remove user_example`
+    ```
+
+* Crea un nuevo usuario desde el contenedor ckan. Necesitarás obtener una sesión en el contenedor en ejecución
+
+   ```bash
+   ckan -c ckan.ini user add usuario_ejemplo email=usuario_ejemplo@localhost`
+    ```
+
+   Para eliminar el usuario 'user_example
+   ```bash
+   ckan -c ckan.ini user remove usuario_ejemplo`
+    ```
+
+### Docker Compose. Configurar un servicio docker compose para que se inicie al arrancar
+Para que Docker Compose se ejecute automáticamente al reiniciar una máquina, puedes seguir los siguientes pasos:
+
+1. Crea un archivo de servicio systemd para Docker Compose. Puede crear un archivo llamado `ckan-docker-compose.service` en la carpeta `/etc/systemd/system/` con el siguiente contenido:
+
+    ```bash
+    [Unit]
+    Description=CKAN Docker Compose Application Service
+    Requires=docker.service
+    After=docker.service
+
+    [Service]
+    User=docker
+    Group=docker
+    Type=oneshot
+    RemainAfterExit=yes
+    WorkingDirectory=/path/to/project/ckan-docker/
+    ExecStart=/bin/docker compose up -d
+    ExecStop=/bin/docker compose down
+    TimeoutStartSec=0
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+2. Sustituye `/path/to/project/ckan-docker/` por la ruta donde se encuentra el fichero `docker-compose.yml` de tu proyecto y y comprueba la ruta al binario de docker compose en ejecución y parada: `/bin/docker`. Cambia también el `User` / `Group` para ejecutar el servicio.
+3. Carga el archivo de servicio systemd con el siguiente comando:
+
+    ```bash
+    sudo systemctl daemon-reload
+    ```
+
+4. Permite que el servicio se inicie automáticamente al arrancar la máquina:
+
+    ```bash
+    sudo systemctl enable ckan-docker-compose
+    ```
+
+5. Ahora puede iniciar el servicio con el siguiente comando:
+
+    ```bash
+    sudo systemctl start ckan-docker-compose
+    ```
+
+6. Si desea detener o comprobar el estado del servicio, utilice los siguientes comandos:
+
+    ```bash
+    # Detener el servicio
+    sudo systemctl stop ckan-docker-compose
+
+    # Comprobar el estado
+    sudo systemctl status ckan-docker-compose
+    ```

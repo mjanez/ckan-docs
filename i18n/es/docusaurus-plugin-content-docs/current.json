@@ -1,0 +1,46 @@
+{
+  "version.label": {
+    "message": "Siguiente",
+    "description": "The label for version current"
+  },
+  "sidebar.sidebar.category.Overview": {
+    "message": "Visión general",
+    "description": "The label for category Overview in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.Installation Guides": {
+    "message": "Guías de instalación",
+    "description": "The label for category Installation Guides in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.Docker with Docker Compose": {
+    "message": "Docker con Docker Compose",
+    "description": "The label for category Docker with Docker Compose in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.Ansible": {
+    "message": "Ansible",
+    "description": "The label for category Ansible in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.User guides": {
+    "message": "Guías del usuario",
+    "description": "The label for category User guides in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.API": {
+    "message": "API",
+    "description": "The label for category API in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.Development": {
+    "message": "Desarrollo",
+    "description": "The label for category Development in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.CKAN": {
+    "message": "CKAN",
+    "description": "The label for category CKAN in sidebar sidebar"
+  },
+  "sidebar.sidebar.category.Extensions": {
+    "message": "Extensiones",
+    "description": "The label for category Extensions in sidebar sidebar"
+  },
+  "sidebar.sidebar.doc.CKAN deployments": {
+    "message": "Despliegues de CKAN",
+    "description": "The label for the doc item CKAN deployments in sidebar sidebar, linking to the doc intro"
+  }
+}
