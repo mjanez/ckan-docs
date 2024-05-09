@@ -15,10 +15,24 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - name: Generate English PDF
-        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs (English)" --outputPDFFilename="static/pdf/CKAN_Docs_en.pdf"
-      - name: Generate Spanish PDF
-        run: npx docs-to-pdf --initialDocURLs="https://mjanez.github.io/ckan-docs/es/intro" --contentSelector="article" --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" --excludeSelectors=".margin-vert--xl a,[class^='tocCollapsible'],.breadcrumbs,.theme-edit-this-page" --coverImage="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lohj.png" --coverTitle="CKAN Docs (Español)" --outputPDFFilename="static/pdf/CKAN_Docs_es.pdf"
+      - name: Install Prince
+        run: |
+          curl https://www.princexml.com/download/prince-14.2-linux-generic-x86_64.tar.gz -O
+          tar zxf prince-14.2-linux-generic-x86_64.tar.gz
+          cd prince-14.2-linux-generic-x86_64
+          yes "" | sudo ./install.sh
+      - name: Build English PDF
+        run: npx docusaurus-prince-pdf -u https://mjanez.github.io/ckan-docs/intro -o static/pdf/CKAN_Docs.pdf
+      - name: Build Spanish PDF
+        run: npx docusaurus-prince-pdf -u https://mjanez.github.io/ckan-docs/es/intro -o static/pdf/CKAN_Docs_es.pdf
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: result
+          path: |
+            static/pdf/CKAN_Docs.pdf
+            static/pdf/CKAN_Docs_es.pdf
+          if-no-files-found: error
       - name: Commit PDFs
         run: |
           git config --local user.email "action@github.com"
