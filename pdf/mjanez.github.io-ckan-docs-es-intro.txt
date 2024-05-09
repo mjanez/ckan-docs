@@ -1,0 +1,11 @@
+https://mjanez.github.io/ckan-docs/es/installation/docker/intro
+https://mjanez.github.io/ckan-docs/es/installation/docker/requirements
+https://mjanez.github.io/ckan-docs/es/installation/docker/ckan
+https://mjanez.github.io/ckan-docs/es/installation/docker/ckan-enhancements
+https://mjanez.github.io/ckan-docs/es/installation/docker/ckan-addons
+https://mjanez.github.io/ckan-docs/es/installation/ansible/intro
+https://mjanez.github.io/ckan-docs/es/installation/ansible/requirements
+https://mjanez.github.io/ckan-docs/es/installation/ansible/ckan
+https://mjanez.github.io/ckan-docs/es/api/
+https://mjanez.github.io/ckan-docs/es/development/ckan/intro
+https://mjanez.github.io/ckan-docs/es/development/extensions/harvesters
