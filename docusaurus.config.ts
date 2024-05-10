@@ -10,6 +10,7 @@ const deploymentBranch = 'gh-pages'
 
 const config: Config = {
   title: 'CKAN Docs',
+  staticDirectories: ['static'],
   tagline: 'Deployments and more!',
   favicon: 'img/favicon.ico',
   
