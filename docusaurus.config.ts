@@ -56,6 +56,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/ckan-docker/ckan-docker-logo.png',
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
       logo: {
         alt: 'CKAN Docs: Deployments and more!',
