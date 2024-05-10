@@ -79,7 +79,7 @@ const config: Config = {
           value: '<FAIcon icon="fa-brands fa-github" size="4x" />',
         },
         {
-          href: `https://github.com/${organizationName}/${projectName}/blob/main/static/pdf/CKAN_Docs.pdf`,
+          href: `https://github.com/${organizationName}/${projectName}/blob/main/static/pdf`,
           'aria-label': 'Download PDF',
           title: 'PDF Download',
           className: 'navbar__icon navbar__github',
