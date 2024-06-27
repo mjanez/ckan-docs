@@ -1,3 +1,0 @@
-#! /bin/sh
-
-exec "/usr/local/lib/prince/bin/prince" --prefix="/usr/local/lib/prince" "$@"
