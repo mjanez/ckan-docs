@@ -20,11 +20,11 @@ A [Data Management System (DMS)][dms] is a _framework_. It can be used to create
 - [CKAN][]: the open source data management system we created in 2007 and that we continue to develop and maintain. The main information on CKAN is at https://ckan.org/. Here we have some specific notes on how we develop and deploy CKAN as well as our thoughts on the [next generation of CKAN (v3)][v3].
 - [DataHub][]: a simpler version of CKAN focused on SaaS platform at DataHub.io. DataHub and CKAN v3 share many of the same core components.
 
-[data portals]: /docs/dms/data-portals
-[data lakes]: /docs/dms/data-lake
-[data catalogs]: /docs/dms/data-portals
-[dms]: /docs/dms/dms
-[CKAN]: /docs/dms/ckan
+[data portals]: ./docs/dms/data-portals
+[data lakes]: ./docs/dms/data-lake
+[data catalogs]: ./docs/dms/data-portals
+[dms]: ./docs/dms/dms
+[CKAN]: ./docs/dms/ckan
 
 ### Solutions
 
@@ -36,42 +36,42 @@ You can use a DMS to build many kinds of specific solutions
 - Data Lake: you can use a DMS to rapidly create a data lake using existing infrastructure. For example, using the DMS' catalog and storage gateway with existing cloud storage and data processing capabilities.
 - Data Engineering: you can use components of the DMS to rapidly create, orchestrate and supply data pipelines.
 
-[dms]: /docs/dms/dms
-[portals]: /docs/dms/data-portals
-[publishing]: /docs/dms/publish
-[datahub]: /docs/dms/datahub
-[ckan]: /docs/dms/ckan
-[v3]: /docs/dms/ckan-v3
+[dms]: ./docs/dms/dms
+[portals]: ./docs/dms/data-portals
+[publishing]: ./docs/dms/publish
+[datahub]: ./docs/dms/datahub
+[ckan]: ./docs/dms/ckan
+[v3]: ./docs/dms/ckan-v3
 
 ### Features
 
 A DMS has a variety of features. This section provides an overview and links to specific feature pages that include details of how they work in CKAN and CKAN v3 / DataHub.
 
-<img src="https://docs.google.com/drawings/d/e/2PACX-1vRdMzNeIAEkjDRGtBfuocy6zDyRg_qDujSkLrTe69U1qlu_1kfTYN0OL_v4IZKKo0eDXRbCzgzQMlFz/pub?w=622&amp;h=635" />
+<img src="https:/./docs.google.com/drawings/d/e/2PACX-1vRdMzNeIAEkjDRGtBfuocy6zDyRg_qDujSkLrTe69U1qlu_1kfTYN0OL_v4IZKKo0eDXRbCzgzQMlFz/pub?w=622&amp;h=635" />
 
 > [!tip] There are many ways to break down features and this is just one framing. We are thinking about others and if you have thoughts please get in touch.
 
-- [Discovering and showcasing data (catalog and presenting)](/docs/dms/frontend)
-- [Views on data](/docs/dms/views) including visualizing and previewing data as well [Data Explorers][explorer] and [Dashboards][]
-- [Publishing data](/docs/dms/publish)
-- [Data API DataStore](/docs/dms/data-api)
-- [Permissions](/docs/dms/permissions) and [Authentication](/docs/dms/authentication)
-- [Versioning](/docs/dms/versioning)
-- [Harvesting](/docs/dms/harvesting)
+- [Discovering and showcasing data (catalog and presenting)](./docs/dms/frontend)
+- [Views on data](./docs/dms/views) including visualizing and previewing data as well [Data Explorers][explorer] and [Dashboards][]
+- [Publishing data](./docs/dms/publish)
+- [Data API DataStore](./docs/dms/data-api)
+- [Permissions](./docs/dms/permissions) and [Authentication](./docs/dms/authentication)
+- [Versioning](./docs/dms/versioning)
+- [Harvesting](./docs/dms/harvesting)
 
-[dashboards]: /docs/dms/dashboards
-[explorer]: /docs/dms/data-explorer
+[dashboards]: ./docs/dms/dashboards
+[explorer]: ./docs/dms/data-explorer
 
 ### Components
 
 A DMS has the following key components:
 
-- [HubStore](/docs/dms/hubstore)
-- [Data Flows and Factory](/docs/dms/flows)
-  - [Loading to DataStore](/docs/dms/load)
-- [Storage](/docs/dms/storage)
-  - [Blob Storage](/docs/dms/blob-storage)
-  - [Structured Storage - see DataStore](/docs/dms/data-api)
+- [HubStore](./docs/dms/hubstore)
+- [Data Flows and Factory](./docs/dms/flows)
+  - [Loading to DataStore](./docs/dms/load)
+- [Storage](./docs/dms/storage)
+  - [Blob Storage](./docs/dms/blob-storage)
+  - [Structured Storage - see DataStore](./docs/dms/data-api)
 
 https://coggle.it/diagram/Xiw2ZmYss-ddJVuK/t/data-portal-feature-breakdown
 
@@ -92,23 +92,23 @@ https://openspending.org/
 Service Reliability Engineering (SRE) and Developer Experience (DX) for our CKAN cluster technology.
 
 - [Developer Experience][dx]
-- [DX - Deploy](/docs/dms/dx/deploy)
-- [DX - Cluster](/docs/dms/dx/cluster)
+- [DX - Deploy](./docs/dms/dx/deploy)
+- [DX - Cluster](./docs/dms/dx/cluster)
 
 Old cluster
 
-- [Deploy in old cluster](/docs/dms/deploy)
-- [Exporting from CKAN-Cloud](/docs/dms/migration)
-- [Cloud](/docs/dms/cloud) - start on CKAN cloud documentation
+- [Deploy in old cluster](./docs/dms/deploy)
+- [Exporting from CKAN-Cloud](./docs/dms/migration)
+- [Cloud](./docs/dms/cloud) - start on CKAN cloud documentation
 
 ## Research
 
-- [Data Frames and what would a JS data frame library look like](/docs/dms/dataframe)
-- [Dataset Relationships](/docs/dms/relationships)
+- [Data Frames and what would a JS data frame library look like](./docs/dms/dataframe)
+- [Dataset Relationships](./docs/dms/relationships)
 
 ## Miscellaneous
 
-- [Glossary &raquo;](/docs/dms/glossary)
-- [Notebook -- our informal blog &raquo;](/docs/dms/notebook)
+- [Glossary &raquo;](./docs/dms/glossary)
+- [Notebook -- our informal blog &raquo;](./docs/dms/notebook)
 
-[dx]: /docs/dms/dx
+[dx]: ./docs/dms/dx
