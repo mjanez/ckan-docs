@@ -49,7 +49,7 @@ Este diagrama está basado en el fichero `docker-compose.yml` de [github.com/mja
  
 Una diferencia de este diagrama al archivo es que no estamos incluyendo DataPusher, ya que no es una dependencia requerida.
 
-ckan-docker](../../static/img/ckan-docker/ckan-docker-services.png)
+![ckan-docker](../../static/img/ckan-docker/ckan-docker-services.png)
 
 >[!TIP]
 > Las bases de datos pueden ejecutarse como contenedores Docker, o depender de servicios de terceros como Amazon Relational Database Service (RDS), Google Cloud Platform (GCP), etc.
